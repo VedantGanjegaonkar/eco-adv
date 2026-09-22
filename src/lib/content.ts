@@ -53,14 +53,14 @@ export type Departure = {
 
 export const departures: Departure[] = [
   {
-    date: 'Sat 22 Aug',
-    dest: 'Naneghat Reverse Waterfall',
+    date: 'Thu 1 OCT 2026',
+    dest: 'RATANGAD',
     kind: 'Sahyadri, Maharashtra · the waterfall that runs upward',
     dur: '2 days · 1 night',
     grade: 'Easy',
-    price: '₹2,850',
-    spots: '₹1,100 advance',
-    whatsAppKeyword: 'NANEGHAT',
+    price: '₹4,250',
+    spots: '₹1,800 advance',
+    whatsAppKeyword: 'RATANGAD',
   },
   {
     date: 'Sat 22 Aug',
