@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Eco Adventure & Sports Society — design tokens.
+ * Palette sampled from the logo (green #007830 / orange #D8601C) per the
+ * design spec: green darkened two steps for surfaces, orange deepened to
+ * #C4551A and reserved for calls to action only.
+ */
+@theme {
+  /* greens */
+  --color-forest-950: #0C2A17; /* deep forest — dark surfaces */
+  --color-forest-900: #1E4429; /* rules on dark */
+  --color-forest-850: #255235; /* header divider */
+  --color-forest-800: #17532F; /* forest — headings, links */
+  --color-forest-700: #17703F; /* WhatsApp action green */
+  --color-moss-600: #4E7D5C;   /* moss — meta, rules */
+  --color-moss-500: #6E8470;   /* section labels, table heads */
+  --color-moss-450: #7E9480;   /* footer column labels */
+  --color-moss-400: #93B79B;   /* taglines on dark */
+  --color-moss-300: #B2C6B0;   /* footer body on dark */
+  --color-moss-200: #DBE4D6;   /* body copy on dark */
+  --color-moss-150: #CFD8C9;   /* filter chip borders */
+
+  /* neutrals */
+  --color-ink: #2A382C;        /* body ink (11.4:1 on paper) */
+  --color-ink-soft: #5C6B5E;   /* secondary copy */
+  --color-paper: #F4F0E8;      /* page ground */
+  --color-cream: #FFFDF8;      /* card / band surfaces */
+  --color-cream-hover: #F6F2E9;
+  --color-line: #E4DECF;       /* the single rule weight */
+  --color-line-strong: #DCD5C6;
+  --color-pill: #E9E3D5;       /* language pill */
+
+  /* warm accents — a warm block always means “act” */
+  --color-ember-600: #C4551A;
+  --color-ember-800: #9A400F;
+  --color-sand-300: #F0C39A;
+  --color-sand-500: #B9A282;   /* safety list numerals */
+
+  /* trek grades */
+  --color-grade-easy: #1B6B36;
+  --color-grade-moderate: #8A6A1F;
+
+  /* type */
+  --font-sans: var(--font-mukta), system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-forest-800);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-ember-600);
 }
