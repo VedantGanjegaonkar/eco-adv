@@ -13,6 +13,7 @@
   },
   "nav": {
     "treks": "Treks",
+    "gallery": "Gallery",
     "youthCamps": "Youth Camps",
     "familyCamps": "Family Camps",
     "outbound": "Outbound",
@@ -46,7 +47,7 @@
   },
   "departures": {
     "heading": "Upcoming departures",
-    "month": "August",
+    "month": "October",
     "explainerMobile": "Sat 10:30pm out, Mon 5:30am back — zero leave. Ex Vadodara · train, cab, breakfast, lunch, trek leader, forest entry and first aid included.",
     "explainerDesktop": "Overnight train both ways — Sat 10:30pm out, Mon 5:30am back, so no leave from school or office. Ex Vadodara, boarding also at Ahmedabad and Surat. Price includes train, cab, breakfast, lunch, trek leader, forest entry and first aid.",
     "colDates": "Dates",
@@ -55,7 +56,7 @@
     "colGrade": "Grade",
     "colPrice": "Price",
     "whatsAppCta": "WhatsApp →",
-    "calendarCta": "See the August calendar"
+    "calendarCta": "See the October calendar"
   },
   "why": {
     "label": "Why we exist",
@@ -113,5 +114,61 @@
   "safetyFirst": "Safety First",
   "unforgettableExperience": "Unforgettable Experience",
   "welcome": "Welcome to EcoAdventures",
-  "description": "Experience the beauty of India's natural landscapes through our carefully curated trekking and camping programs."
+  "description": "Experience the beauty of India's natural landscapes through our carefully curated trekking and camping programs.",
+  "galleryPage": {
+    "meta": {
+      "title": "Naneghat — Water falls up · Eco Adventure & Sports Society",
+      "description": "Sunday 23 August 2026. Sixteen trekkers, one local from Dadar, and a waterfall the monsoon wind blows back up the Naneghat cliff.",
+      "ogAlt": "Spray from the Naneghat reverse waterfall rising over the cliff edge"
+    },
+    "hero": {
+      "eyebrow": "Naneghat · Sahyadri · Sunday 23 August 2026",
+      "eyebrowMobile": "Naneghat · Sahyadri · 23 August 2026",
+      "headA": "Water falls",
+      "headB": "up.",
+      "sub": "The monsoon wind climbs the Naneghat cliff faster than the stream can fall.",
+      "scrollSticker": "Scroll to watch the water climb",
+      "playClip": "Play the clip",
+      "posterAlt": "The reverse waterfall at Naneghat: spray blown back up over the cliff edge",
+      "clipDescription": "Video, nine seconds: at the cliff edge the stream reaches the drop and the wind carries it back up as spray."
+    },
+    "field": {
+      "label": "The day, in order",
+      "items": {
+        "dadar": {
+          "caption": "05:42 · Dadar · before dawn",
+          "alt": "Dadar station platform before dawn, a yellow local waiting"
+        },
+        "group": {
+          "caption": "12:14 · the base · sixteen of us",
+          "alt": "Sixteen trekkers at the base of Naneghat with the Nanacha Angtha pinnacle behind"
+        },
+        "fall": {
+          "caption": "At the edge · seven seconds",
+          "alt": "Short clip: a trekker at the edge of the reverse waterfall in the spray"
+        },
+        "reverseFall": {
+          "caption": "14:48 · the cliff edge · the water goes up",
+          "alt": "The reverse waterfall: a stream reaching the cliff edge and blowing upward as spray"
+        },
+        "pass": {
+          "caption": "16:43 · the rock-cut pass · going down",
+          "alt": "Trekkers descending through the narrow rock-cut Naneghat pass"
+        },
+        "sign": {
+          "caption": "18:45 · the highway · नाणेघाट 6",
+          "alt": "Highway sign at dusk reading Malshej Ghat 28 and Naneghat 6"
+        }
+      },
+      "footnote": {
+        "eyebrow": "The day in numbers",
+        "line": "16 trekkers · 05:42 → 18:45 · 13 h 03 min · one local from Dadar"
+      }
+    },
+    "close": {
+      "eyebrow": "Next departure",
+      "heading": "Next time the water goes up.",
+      "cta": "WhatsApp ‘{keyword}’"
+    }
+  }
 }

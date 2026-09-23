@@ -44,6 +44,22 @@
   /* type */
   --font-sans: var(--font-mukta), system-ui, sans-serif;
   --font-serif: var(--font-newsreader), Georgia, serif;
+
+  /* gallery: sign-a ⇄ sign-b crossfade (the motorbike) */
+  --animate-sign-swap: sign-swap 6s ease-in-out infinite;
+  @keyframes sign-swap {
+    0%, 42%  { opacity: 0; }
+    50%, 92% { opacity: 1; }
+    100%     { opacity: 0; }
+  }
+}
+
+/* Gallery hero: side-by-side layout on desktop AND on short landscape screens
+   (phones held sideways), where a full-bleed portrait clip would be a sliver. */
+@custom-variant wide {
+  @media (min-width: 1024px), (orientation: landscape) and (max-height: 520px) {
+    @slot;
+  }
 }
 
 html {

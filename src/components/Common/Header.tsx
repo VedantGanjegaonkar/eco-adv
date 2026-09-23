@@ -13,6 +13,7 @@ export default function Header() {
 
   const navLinks = [
     { href: '/treks', label: t('nav.treks') },
+    { href: '/gallery', label: t('nav.gallery') },
     { href: '/#programmes', label: t('nav.youthCamps') },
     { href: '/#programmes', label: t('nav.familyCamps') },
     { href: '/#programmes', label: t('nav.outbound') },
