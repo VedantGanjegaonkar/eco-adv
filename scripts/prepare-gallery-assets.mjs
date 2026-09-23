@@ -48,10 +48,11 @@ const ALBUM = {
     items: [
       { src: 'PXL_20260823_001235353.jpg', out: '01-dadar.jpg' },
       { src: 'PXL_20260823_064411787 (1).jpg', out: '02-group.jpg' },
-      { src: 'PXL_20260823_091831260.jpg', out: '03-reverse-fall.jpg' },
+      { src: 'trail-mist.jpeg', out: '03-trail.jpg' },
       { src: 'PXL_20260823_111354193.MP.jpg', out: '04-pass.jpg' },
       { src: 'PXL_20260823_131517828.jpg', out: '05-sign-a.jpg' },
       { src: 'PXL_20260823_131523640.jpg', out: '06-sign-b.jpg' },
+      { src: 'summit-mist.jpeg', out: '07-summit.jpg' },
     ],
   },
   clips: [

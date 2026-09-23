@@ -34,8 +34,10 @@ export default function ScrubHero() {
   const { scrollYProgress } = useScroll({ target: wrapperRef, offset: ['start start', 'end end'] })
   const smooth = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4, restDelta: 0.0005 })
   const frame = useTransform(smooth, (v) => v * (naneghatFrames.count - 1))
-  const upY = useTransform(smooth, [0, 0.35], ['100vh', '0vh'], { ease: easeOut })
-  const upOpacity = useTransform(smooth, [0, 0.04, 0.35], [0, 1, 1])
+  // "up." starts just below the fold and lands by a quarter of the hero, so
+  // the first swipe on a phone already shows something moving.
+  const upY = useTransform(smooth, [0, 0.22], ['40vh', '0vh'], { ease: easeOut })
+  const upOpacity = useTransform(smooth, [0, 0.03, 0.22], [0, 1, 1])
   // Function form on purpose: the array form lets motion hand scroll-linked
   // values to a native ViewTimeline, which misfires inside a sticky element.
   const stickerOpacity = useTransform(() => stickerFade(scrollYProgress.get()))
@@ -50,7 +52,8 @@ export default function ScrubHero() {
   return (
     <section
       ref={wrapperRef}
-      className={isStatic ? 'relative bg-forest-950' : 'relative h-[400vh] bg-forest-950'}
+      // Shorter pin on phones: three screens of thumb-scrolling felt inert.
+      className={isStatic ? 'relative bg-forest-950' : 'relative h-[300vh] bg-forest-950 wide:h-[400vh]'}
     >
       <div className={`${isStatic ? 'relative' : 'sticky top-0'} h-dvh overflow-hidden`}>
         <div className="relative mx-auto h-full max-w-[1440px] wide:px-14">
@@ -152,10 +155,11 @@ export default function ScrubHero() {
         </div>
 
         {!isStatic && (
-          /* Progress, inverted: fills bottom → top as the water rises. */
+          /* Progress, inverted: fills bottom → top as the water rises. A hair
+             thicker on phones, where it is the main "it's working" cue. */
           <div
             aria-hidden
-            className="absolute top-1/2 right-8 hidden h-[40vh] w-px -translate-y-1/2 bg-line/25 wide:block"
+            className="absolute top-1/2 right-3 h-[32vh] w-[4px] -translate-y-1/2 overflow-hidden rounded-full bg-forest-950/35 shadow-[0_0_0_1px_rgba(255,253,248,.28)] wide:right-8 wide:h-[40vh] wide:w-px wide:rounded-none wide:bg-line/25 wide:shadow-none"
           >
             <motion.span className="absolute inset-0 origin-bottom bg-cream" style={{ scaleY: smooth }} />
           </div>

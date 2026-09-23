@@ -8,10 +8,11 @@
 import type { StaticImageData } from 'next/image'
 import dadar from '@/assets/gallery/naneghat/01-dadar.jpg'
 import group from '@/assets/gallery/naneghat/02-group.jpg'
-import reverseFall from '@/assets/gallery/naneghat/03-reverse-fall.jpg'
+import trail from '@/assets/gallery/naneghat/03-trail.jpg'
 import pass from '@/assets/gallery/naneghat/04-pass.jpg'
 import signA from '@/assets/gallery/naneghat/05-sign-a.jpg'
 import signB from '@/assets/gallery/naneghat/06-sign-b.jpg'
+import summit from '@/assets/gallery/naneghat/07-summit.jpg'
 import wavePoster from '@/assets/gallery/naneghat/wave-poster.jpg'
 import fallPoster from '@/assets/gallery/naneghat/fall-poster.jpg'
 
@@ -37,7 +38,7 @@ export type FieldLayout = {
 export type FieldItem =
   | {
       kind: 'still'
-      key: 'dadar' | 'group' | 'reverseFall' | 'pass'
+      key: 'dadar' | 'group' | 'trail' | 'summit' | 'pass'
       src: StaticImageData
       layout: FieldLayout
     }
@@ -84,8 +85,8 @@ export const fieldItems: FieldItem[] = [
   },
   {
     kind: 'still',
-    key: 'reverseFall',
-    src: reverseFall,
+    key: 'trail',
+    src: trail,
     layout: {
       col: 'lg:col-start-7 lg:col-span-4',
       offset: 'lg:mt-[24vh]',
@@ -96,11 +97,23 @@ export const fieldItems: FieldItem[] = [
   },
   {
     kind: 'still',
+    key: 'summit',
+    src: summit,
+    layout: {
+      col: 'lg:col-start-2 lg:col-span-4',
+      offset: 'lg:-mt-[8vh]',
+      delta: 90,
+      deltaMobile: 24,
+      sizes: portraitSizes,
+    },
+  },
+  {
+    kind: 'still',
     key: 'pass',
     src: pass,
     layout: {
-      col: 'lg:col-start-3 lg:col-span-4',
-      offset: 'lg:-mt-[10vh]',
+      col: 'lg:col-start-8 lg:col-span-4',
+      offset: 'lg:mt-[10vh]',
       delta: 140,
       deltaMobile: 40,
       sizes: portraitSizes,
@@ -110,10 +123,10 @@ export const fieldItems: FieldItem[] = [
     kind: 'footnote',
     key: 'footnote',
     layout: {
-      col: 'lg:col-start-8 lg:col-span-4',
-      offset: 'lg:mt-[16vh]',
-      delta: 90,
-      deltaMobile: 24,
+      col: 'lg:col-start-3 lg:col-span-4',
+      offset: 'lg:mt-[6vh]',
+      delta: 40,
+      deltaMobile: 16,
       sizes: '',
     },
   },
@@ -122,6 +135,12 @@ export const fieldItems: FieldItem[] = [
     key: 'sign',
     a: signA,
     b: signB,
-    layout: { col: 'lg:col-start-5 lg:col-span-4', delta: 40, deltaMobile: 16, sizes: portraitSizes },
+    layout: {
+      col: 'lg:col-start-8 lg:col-span-4',
+      offset: 'lg:-mt-[4vh]',
+      delta: 90,
+      deltaMobile: 24,
+      sizes: portraitSizes,
+    },
   },
 ]

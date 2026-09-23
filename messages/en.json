@@ -147,9 +147,13 @@
           "caption": "At the edge · seven seconds",
           "alt": "Short clip: a trekker at the edge of the reverse waterfall in the spray"
         },
-        "reverseFall": {
-          "caption": "14:48 · the cliff edge · the water goes up",
-          "alt": "The reverse waterfall: a stream reaching the cliff edge and blowing upward as spray"
+        "trail": {
+          "caption": "The climb · stone steps in the mist",
+          "alt": "A trekker resting on a rock beside the stone steps of the misty Naneghat trail"
+        },
+        "summit": {
+          "caption": "The top · in the clouds",
+          "alt": "A trekker in a neon backpack sitting on a rock at the top of Naneghat, the cliffs fading into mist; handwritten text on the collage reads ‘Here is where I’m happiest’"
         },
         "pass": {
           "caption": "16:43 · the rock-cut pass · going down",
@@ -162,7 +166,7 @@
       },
       "footnote": {
         "eyebrow": "The day in numbers",
-        "line": "16 trekkers · 05:42 → 18:45 · 13 h 03 min · one local from Dadar"
+        "line": "14 trekkers · 22:50 → 05:30 · 31 hrs · Vadodara to Vadodara"
       }
     },
     "close": {
