@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Header from '@/components/Common/Header'
 import Footer from '@/components/Common/Footer'
-import StickyCallBar from '@/components/Common/StickyCallBar'
 import GalleryMotionProvider from '@/components/Gallery/GalleryMotionProvider'
 import ScrubHero from '@/components/Gallery/ScrubHero'
 import RiseField from '@/components/Gallery/RiseField'
@@ -46,7 +45,6 @@ export default async function GalleryPage({ params }: Props) {
         <CloseBand />
       </main>
       <Footer />
-      <StickyCallBar />
     </>
   )
 }

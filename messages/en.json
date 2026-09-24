@@ -115,6 +115,40 @@
   "unforgettableExperience": "Unforgettable Experience",
   "welcome": "Welcome to EcoAdventures",
   "description": "Experience the beauty of India's natural landscapes through our carefully curated trekking and camping programs.",
+  "treksPage": {
+    "meta": {
+      "title": "Treks · Eco Adventure & Sports Society",
+      "description": "Where we are taking groups this season: one-day treks and a lakeside weekend in the Sahyadri, overnight train both ways from Vadodara."
+    },
+    "heading": "Treks",
+    "sub": "Where we are taking groups this season. Overnight train both ways, ex Vadodara — boarding also at Ahmedabad and Surat.",
+    "learnMore": "Learn more →",
+    "allTreks": "All treks",
+    "dayTreksFact": "{count} one-day treks · 31 hrs door to door",
+    "weekend": {
+      "eyebrow": "Flowering special · post-monsoon · running now",
+      "cardsLabel": "The weekend, card by card",
+      "whatsAppCta": "WhatsApp ‘{keyword}’"
+    },
+    "timeline": {
+      "open": "Detailed timeline",
+      "eyebrow": "Detailed timeline",
+      "batchesLabel": "October batches",
+      "chooseBatch": "Choose your batch",
+      "day": "Day {n}",
+      "departsLine": "Departs {from} night · back {to} morning",
+      "close": "Close",
+      "included": "Included",
+      "note": "Timings may shift slightly depending on weather, traffic and group pace.",
+      "whatsAppCta": "WhatsApp ‘{keyword}’"
+    },
+    "day": {
+      "eyebrow": "One-day treks · 31 hrs door to door",
+      "heading": "Monsoon special",
+      "explainer": "Sat 10:30pm out, Mon 5:30am back — zero leave from school or office. Train, cab, breakfast, lunch, trek leader, forest entry and first aid included.",
+      "whatsAppCta": "WhatsApp ‘{keyword}’"
+    }
+  },
   "galleryPage": {
     "meta": {
       "title": "Naneghat — Water falls up · Eco Adventure & Sports Society",

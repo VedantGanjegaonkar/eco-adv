@@ -1,88 +1,57 @@
-'use client'
-
 import Image from 'next/image'
-import Link from 'next/link'
-import { useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
+import type { TrekRegion } from '@/lib/treks'
 
-interface TrekCardProps {
-  id: string
-  title: string
-  slug: string
-  image?: {
-    url: string
-    alt: string
-  }
-  description: string
-  duration: number
-  difficulty: string
-  price: number
-  location: string
+/** “Every weekend of October” → “every weekend of October” for mid-sentence use. */
+function lowerFirst(s: string) {
+  return s.charAt(0).toLowerCase() + s.slice(1)
 }
 
-const difficultyColors = {
-  Easy: 'bg-green-100 text-green-800',
-  Moderate: 'bg-yellow-100 text-yellow-800',
-  Difficult: 'bg-orange-100 text-orange-800',
-  Expert: 'bg-red-100 text-red-800',
-}
+const coverSizes = '(min-width:1440px) 427px, (min-width:1024px) 30vw, (min-width:768px) 48vw, 100vw'
 
-export default function TrekCard({ 
-  slug, 
-  title, 
-  description, 
-  duration, 
-  difficulty, 
-  price, 
-  location,
-  image 
-}: TrekCardProps) {
-  const locale = useLocale()
+/** One region on the treks index — a compact card that sits three-up on
+ *  desktop, so more regions (Himalaya, Rajasthan…) can slot in beside it. */
+export default function TrekCard({ trek }: { trek: TrekRegion }) {
+  const t = useTranslations('treksPage')
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      {/* Image */}
-      <div className="relative h-48 w-full bg-gray-200">
-        {image?.url ? (
-          <Image
-            src={image.url}
-            alt={image.alt || title}
-            fill
-            className="object-cover"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-gray-400">
-            No Image
-          </div>
-        )}
-      </div>
+    <Link
+      href={`/treks/${trek.slug}`}
+      className="group flex flex-col overflow-hidden rounded-[4px] border border-line bg-cream transition-shadow hover:shadow-[0_8px_30px_rgba(12,42,23,.10)]"
+    >
+      <span className="relative block aspect-[4/3] w-full overflow-hidden bg-line">
+        <Image
+          src={trek.cover}
+          alt={trek.coverAlt}
+          fill
+          placeholder="blur"
+          sizes={coverSizes}
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </span>
 
-      {/* Content */}
-      <div className="p-4">
-        <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{description}</p>
+      {/* Colours sit on spans: the global `a { color }` rule outranks utilities on the anchor. */}
+      <span className="flex flex-1 flex-col p-4 lg:p-5">
+        <span className="block text-[11px] tracking-[.14em] text-moss-500 uppercase">
+          {trek.region}
+        </span>
+        <span className="mt-1 block font-serif text-[26px] leading-[1.15] text-forest-950 lg:text-[28px]">
+          {trek.title}
+        </span>
+        <span className="mt-1.5 block text-[15px] leading-[1.5] text-ink-soft">{trek.summary}</span>
 
-        {/* Details */}
-        <div className="space-y-2 mb-4 text-sm text-gray-700">
-          <div className="flex justify-between">
-            <span>📍 {location}</span>
-            <span>⏱️ {duration} days</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${difficultyColors[difficulty as keyof typeof difficultyColors] || difficultyColors.Moderate}`}>
-              {difficulty}
-            </span>
-            <span className="font-bold text-green-700">₹{price.toLocaleString()}</span>
-          </div>
-        </div>
+        <span className="mt-3 flex flex-col gap-y-1 text-[14px] text-ink">
+          <span className="block">
+            {trek.weekend.dur} · {lowerFirst(trek.weekend.when)}
+          </span>
+          <span className="block">{t('dayTreksFact', { count: trek.dayTreks.length })}</span>
+        </span>
 
-        {/* CTA Button */}
-        <Link
-          href={`/${locale}/treks/${slug}`}
-          className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2 rounded-lg text-center transition-colors"
-        >
-          Learn More →
-        </Link>
-      </div>
-    </div>
+        <span className="mt-auto block border-t border-line pt-3 text-[15px] font-semibold text-ember-600 group-hover:text-ember-800 lg:pt-4">
+          {t('learnMore')}
+        </span>
+      </span>
+    </Link>
   )
 }

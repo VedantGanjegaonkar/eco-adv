@@ -1,7 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
 import Header from '@/components/Common/Header'
 import Footer from '@/components/Common/Footer'
-import StickyCallBar from '@/components/Common/StickyCallBar'
 import Hero from '@/components/Home/Hero'
 import TrustStrip from '@/components/Home/TrustStrip'
 import Programmes from '@/components/Home/Programmes'
@@ -31,7 +30,6 @@ export default async function HomePage({
         <Testimonials />
       </main>
       <Footer />
-      <StickyCallBar />
     </>
   )
 }

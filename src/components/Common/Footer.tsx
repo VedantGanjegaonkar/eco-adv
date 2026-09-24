@@ -62,7 +62,7 @@ export default function Footer() {
   return (
     <footer className="bg-forest-950 text-moss-300">
       {/* ——— Mobile ——— */}
-      <div className="px-5 pt-8 pb-[108px] text-[16px] leading-[1.7] lg:hidden">
+      <div className="px-5 pt-8 pb-10 text-[16px] leading-[1.7] lg:hidden">
         <div className="font-serif text-[22px] text-cream">{t('common.orgName')}</div>
         <div className="mt-1 text-[14px] tracking-[.1em] text-moss-450 uppercase">
           {t('common.registeredTrust')}
