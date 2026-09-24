@@ -47,7 +47,6 @@ export type Batch = { id: string; day1: string }
 
 export type Timeline = {
   heading: string
-  sub: string
   batches: Batch[]
   blocks: TimelineBlock[]
   included: string[]
@@ -57,7 +56,6 @@ export type WeekendProgramme = {
   title: string
   kind: string
   dur: string
-  when: string
   price: string
   advance: string
   whatsAppKeyword: string
@@ -90,9 +88,8 @@ export const sahyadri: TrekRegion = {
 
   weekend: {
     title: 'Ratangad + Harishchandragad',
-    kind: '2 forts, 1 lake · Bhandardara lakeside camping',
+    kind: '2 forts, 1 lake · camping',
     dur: '2 days · 1 night',
-    when: 'Every weekend of October',
     price: '₹4,250',
     advance: '₹1,800 advance',
     whatsAppKeyword: 'RATANGAD',
@@ -116,7 +113,6 @@ export const sahyadri: TrekRegion = {
     ],
     timeline: {
       heading: 'Harishchandragad + Bhandardara camping + Ratangad',
-      sub: '2 forts. 1 lakeside night. The Sahyadris in full bloom.',
       // Day 1 dates. B1 rides the 2 Oct holiday (Fri–Sat); the rest are Sat–Sun.
       batches: [
         { id: 'B1', day1: '2026-10-02' },

@@ -26,3 +26,8 @@ export function formatRange(from: Date, to: Date): string {
   }
   return `${from.getUTCDate()} ${MONTHS[from.getUTCMonth()]}–${to.getUTCDate()} ${MONTHS[to.getUTCMonth()]}`
 }
+
+/** “Oct” */
+export function monthShort(d: Date): string {
+  return MONTHS[d.getUTCMonth()]
+}

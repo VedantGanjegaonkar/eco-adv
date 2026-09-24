@@ -3,16 +3,29 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { whatsAppLink } from '@/lib/content'
-import { addDays, formatDay, formatRange } from '@/lib/dates'
+import { addDays, formatDay, formatRange, monthShort } from '@/lib/dates'
 import type { Batch, WeekendProgramme } from '@/lib/treks'
 
 const chip =
-  'cursor-pointer rounded-full border px-3 py-1.5 text-[14px] font-semibold whitespace-nowrap transition-colors'
+  'flex-none cursor-pointer rounded-full border px-2.5 py-1.5 text-[13px] font-semibold whitespace-nowrap transition-colors lg:px-3 lg:text-[14px]'
 const chipIdle = `${chip} border-moss-150 bg-cream text-forest-800 hover:border-forest-800`
 const chipOn = `${chip} border-forest-800 bg-forest-800 text-cream`
 
-function batchRange(b: Batch) {
-  return formatRange(addDays(b.day1, 0), addDays(b.day1, 1))
+/** “B1 · 2–3 Oct” — or, on phones when every batch shares a month, “B1 · 2–3”
+ *  with the month carried once by the row label, so four chips fit one row. */
+function ChipText({ batch: b, short }: { batch: Batch; short: boolean }) {
+  const from = addDays(b.day1, 0)
+  const to = addDays(b.day1, 1)
+  const full = `${b.id} · ${formatRange(from, to)}`
+  if (!short) return <>{full}</>
+  return (
+    <>
+      <span className="lg:hidden">
+        {b.id} · {from.getUTCDate()}–{to.getUTCDate()}
+      </span>
+      <span className="hidden lg:inline">{full}</span>
+    </>
+  )
 }
 
 /** Batch chips, the “Detailed timeline” button and the native <dialog> it
@@ -47,20 +60,29 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
   const departs = formatDay(addDays(batch.day1, Math.min(...days) - 1))
   const back = formatDay(addDays(batch.day1, Math.max(...days) - 1))
 
+  const firstMonth = monthShort(addDays(timeline.batches[0].day1, 0))
+  const sameMonth = timeline.batches.every(
+    (b) => monthShort(addDays(b.day1, 0)) === firstMonth && monthShort(addDays(b.day1, 1)) === firstMonth,
+  )
+  const monthTag = sameMonth ? <span className="lg:hidden"> · {firstMonth}</span> : null
+
   return (
     <div className="lg:text-right">
-      <div className="text-[12px] tracking-[.14em] text-moss-500 uppercase">{t('batchesLabel')}</div>
-      <div className="mt-2 flex flex-wrap gap-2 lg:justify-end">
+      <div className="text-[11px] tracking-[.14em] text-moss-500 uppercase lg:text-[12px]">
+        {t('batchesLabel')}
+        {monthTag}
+      </div>
+      <div className="-mx-5 mt-2 flex gap-2 overflow-x-auto px-5 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0">
         {timeline.batches.map((b, i) => (
           <button key={b.id} type="button" onClick={() => open(i)} className={chipIdle}>
-            {b.id} · {batchRange(b)}
+            <ChipText batch={b} short={sameMonth} />
           </button>
         ))}
       </div>
       <button
         type="button"
         onClick={() => open()}
-        className="mt-3 block w-full cursor-pointer rounded-[3px] border border-forest-800 bg-forest-800 px-5 py-[13px] text-center text-[16px] font-semibold text-cream hover:bg-forest-950 lg:inline-block lg:w-auto lg:bg-transparent lg:px-[30px] lg:py-[14px] lg:text-[17px] lg:text-forest-800 lg:hover:bg-forest-800 lg:hover:text-cream"
+        className="mt-3 block w-full cursor-pointer rounded-[3px] border border-forest-800 bg-forest-800 px-5 py-[12px] text-center text-[16px] font-semibold text-cream hover:bg-forest-950 lg:inline-block lg:w-auto lg:bg-transparent lg:px-[30px] lg:py-[14px] lg:text-[17px] lg:text-forest-800 lg:hover:bg-forest-800 lg:hover:text-cream"
       >
         {t('open')}
       </button>
@@ -86,12 +108,6 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
               >
                 {timeline.heading}
               </h2>
-              <p className="mt-2 mb-0 text-[15px] leading-[1.5] text-ink-soft lg:text-[17px]">
-                {timeline.sub}
-              </p>
-              <p className="mt-1.5 mb-0 text-[14px] text-moss-600 lg:text-[15px]">
-                {p.dur} · {p.when}
-              </p>
             </div>
             <button
               type="button"
@@ -105,8 +121,11 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
 
           {/* Batch picker — re-dates the blocks below */}
           <div className="mt-6 border-t border-line pt-5">
-            <div className="text-[12px] tracking-[.14em] text-moss-500 uppercase">{t('chooseBatch')}</div>
-            <div role="group" aria-label={t('chooseBatch')} className="mt-2.5 flex flex-wrap gap-2">
+            <div className="text-[12px] tracking-[.14em] text-moss-500 uppercase">
+              {t('chooseBatch')}
+              {monthTag}
+            </div>
+            <div role="group" aria-label={t('chooseBatch')} className="mt-2.5 flex gap-2 overflow-x-auto lg:flex-wrap">
               {timeline.batches.map((b, i) => (
                 <button
                   key={b.id}
@@ -115,7 +134,7 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
                   onClick={() => setBatchIndex(i)}
                   className={i === batchIndex ? chipOn : chipIdle}
                 >
-                  {b.id} · {batchRange(b)}
+                  <ChipText batch={b} short={sameMonth} />
                 </button>
               ))}
             </div>

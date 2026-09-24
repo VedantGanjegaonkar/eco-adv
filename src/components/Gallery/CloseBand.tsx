@@ -1,7 +1,10 @@
 import { useTranslations } from 'next-intl'
-import { departures, whatsAppLink } from '@/lib/content'
+import { departures } from '@/lib/content'
+import { sahyadri } from '@/lib/treks'
+import { Link } from '@/i18n/navigation'
 
-/** Hands the story off to the next departure — the only ember on the page. */
+/** Hands the story off to the next departure — the only ember on the page —
+ *  and sends the reader to the Sahyadri programme page for the details. */
 export default function CloseBand() {
   const t = useTranslations('galleryPage.close')
   const d = departures[0]
@@ -20,14 +23,13 @@ export default function CloseBand() {
             <span className="mt-0.5 block text-[16px] text-moss-300">{d.kind}</span>
           </span>
           <span className="text-[20px] font-bold text-cream">{d.price}</span>
-          <a
-            href={whatsAppLink(d.whatsAppKeyword)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 block rounded-[3px] bg-ember-600 px-5 py-[15px] text-center text-[17px] font-semibold text-cream hover:bg-ember-800 hover:text-cream lg:mt-0 lg:inline-block lg:px-[38px] lg:py-[17px]"
+          <Link
+            href={`/treks/${sahyadri.slug}`}
+            className="mt-3 block rounded-[3px] bg-ember-600 px-5 py-[15px] text-center text-[17px] font-semibold whitespace-nowrap hover:bg-ember-800 lg:mt-0 lg:inline-block lg:px-[38px] lg:py-[17px]"
           >
-            {t('cta', { keyword: d.whatsAppKeyword })}
-          </a>
+            {/* Colour on the span: the global `a { color }` rule outranks utilities on the anchor. */}
+            <span className="text-cream">{t('cta')}</span>
+          </Link>
         </div>
       </div>
     </section>

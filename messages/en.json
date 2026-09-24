@@ -127,13 +127,14 @@
     "dayTreksFact": "{count} one-day treks · 31 hrs door to door",
     "weekend": {
       "eyebrow": "Flowering special · post-monsoon · running now",
+      "eyebrowMobile": "Running now · flowering special",
       "cardsLabel": "The weekend, card by card",
       "whatsAppCta": "WhatsApp ‘{keyword}’"
     },
     "timeline": {
       "open": "Detailed timeline",
       "eyebrow": "Detailed timeline",
-      "batchesLabel": "October batches",
+      "batchesLabel": "Next batches",
       "chooseBatch": "Choose your batch",
       "day": "Day {n}",
       "departsLine": "Departs {from} night · back {to} morning",
@@ -206,7 +207,7 @@
     "close": {
       "eyebrow": "Next departure",
       "heading": "Next time the water goes up.",
-      "cta": "WhatsApp ‘{keyword}’"
+      "cta": "Check details →"
     }
   }
 }

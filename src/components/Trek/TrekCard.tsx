@@ -3,11 +3,6 @@ import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import type { TrekRegion } from '@/lib/treks'
 
-/** “Every weekend of October” → “every weekend of October” for mid-sentence use. */
-function lowerFirst(s: string) {
-  return s.charAt(0).toLowerCase() + s.slice(1)
-}
-
 const coverSizes = '(min-width:1440px) 427px, (min-width:1024px) 30vw, (min-width:768px) 48vw, 100vw'
 
 /** One region on the treks index — a compact card that sits three-up on
@@ -42,9 +37,7 @@ export default function TrekCard({ trek }: { trek: TrekRegion }) {
         <span className="mt-1.5 block text-[15px] leading-[1.5] text-ink-soft">{trek.summary}</span>
 
         <span className="mt-3 flex flex-col gap-y-1 text-[14px] text-ink">
-          <span className="block">
-            {trek.weekend.dur} · {lowerFirst(trek.weekend.when)}
-          </span>
+          <span className="block">{trek.weekend.dur}</span>
           <span className="block">{t('dayTreksFact', { count: trek.dayTreks.length })}</span>
         </span>
 
