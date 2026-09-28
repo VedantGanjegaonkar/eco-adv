@@ -1,10 +1,5 @@
 import { useTranslations } from 'next-intl'
-import {
-  departures,
-  departureFilters,
-  gradeColor,
-  whatsAppLink,
-} from '@/lib/content'
+import { departures, departureFilters, gradeColor } from '@/lib/content'
 import { Link } from '@/i18n/navigation'
 
 function Dot() {
@@ -39,11 +34,9 @@ export default function Departures() {
         </div>
         <div className="px-5 pt-3.5 pb-[30px]">
           {departures.map((d) => (
-            <a
+            <Link
               key={d.dest}
-              href={whatsAppLink(d.whatsAppKeyword)}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/treks/sahyadri"
               className="block border-t border-line py-4"
             >
               <span className="flex items-baseline justify-between gap-3">
@@ -65,10 +58,10 @@ export default function Departures() {
               <span className="mt-2.5 flex items-center justify-between">
                 <span className="block text-[14px] text-ember-800">{d.spots}</span>
                 <span className="block text-[15px] font-semibold text-ember-600">
-                  {t('whatsAppCta')}
+                  {t('detailsCta')}
                 </span>
               </span>
-            </a>
+            </Link>
           ))}
           <Link
             href="/treks"
@@ -110,11 +103,9 @@ export default function Departures() {
           <div />
         </div>
         {departures.map((d) => (
-          <a
+          <Link
             key={d.dest}
-            href={whatsAppLink(d.whatsAppKeyword)}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/treks/sahyadri"
             className="grid grid-cols-[150px_1fr_170px_130px_140px_180px] items-center gap-x-6 border-b border-line py-[22px] hover:bg-cream-hover"
           >
             <span className="block text-[18px] font-semibold text-forest-950">{d.date}</span>
@@ -128,10 +119,10 @@ export default function Departures() {
             <span className="flex items-center justify-end gap-4">
               <span className="block text-[15px] text-ember-800">{d.spots}</span>
               <span className="block text-[16px] font-semibold text-ember-600">
-                {t('whatsAppCta')}
+                {t('detailsCta')}
               </span>
             </span>
-          </a>
+          </Link>
         ))}
         <Link
           href="/treks"

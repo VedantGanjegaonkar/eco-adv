@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { img } from '@/lib/content'
+import { Link } from '@/i18n/navigation'
 
 export default function Hero() {
   const t = useTranslations('hero')
@@ -48,12 +49,12 @@ export default function Hero() {
             <p className="hidden max-w-[480px] text-[20px] leading-[1.6] text-moss-200 lg:mt-5 lg:mb-8 lg:block">
               {t('subLong')}
             </p>
-            <a
-              href="#departures"
+            <Link
+              href="/treks/sahyadri"
               className="block rounded-[3px] bg-ember-600 px-5 py-[15px] text-center text-[17px] font-semibold text-cream hover:bg-ember-800 hover:text-cream lg:inline-block lg:w-auto lg:px-[38px] lg:py-[17px] lg:text-[18px]"
             >
               {t('cta')}
-            </a>
+            </Link>
           </div>
         </div>
       </div>
