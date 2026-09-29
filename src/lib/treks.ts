@@ -41,8 +41,8 @@ export type TimelineItem = { time: string; what: string }
 export type TimelineBlock = { day: number; label?: string; title: string; items: TimelineItem[] }
 
 /** A departure. `day1` is the ISO date of the trek's Day 1 — the weekday of
- *  every block follows from it, so B1 (Fri–Sat) and the Sat–Sun batches need
- *  no special casing. */
+ *  every block follows from it, so a batch on any weekday needs no special
+ *  casing. */
 export type Batch = { id: string; day1: string }
 
 export type Timeline = {
@@ -113,9 +113,9 @@ export const sahyadri: TrekRegion = {
     ],
     timeline: {
       heading: 'Harishchandragad + Bhandardara camping + Ratangad',
-      // Day 1 dates. B1 rides the 2 Oct holiday (Fri–Sat); the rest are Sat–Sun.
+      // Day 1 dates. Every batch is Sat–Sun, departing Friday night.
       batches: [
-        { id: 'B1', day1: '2026-10-02' },
+        { id: 'B1', day1: '2026-10-03' },
         { id: 'B2', day1: '2026-10-10' },
         { id: 'B3', day1: '2026-10-17' },
         { id: 'B4', day1: '2026-10-24' },
@@ -126,7 +126,7 @@ export const sahyadri: TrekRegion = {
           label: 'Departure night',
           title: 'Out of Gujarat',
           items: [
-            { time: '9:30 PM', what: 'Departure from Vadodara (tempo traveller)' },
+            { time: '9:30 PM', what: 'Departure from Vadodara (tempo traveller or train)' },
             { time: '11:30 PM', what: 'Departure from Surat' },
           ],
         },

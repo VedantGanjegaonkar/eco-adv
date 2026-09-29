@@ -11,7 +11,7 @@ const chip =
 const chipIdle = `${chip} border-moss-150 bg-cream text-forest-800 hover:border-forest-800`
 const chipOn = `${chip} border-forest-800 bg-forest-800 text-cream`
 
-/** “B1 · 2–3 Oct” — or, on phones when every batch shares a month, “B1 · 2–3”
+/** “B1 · 3–4 Oct” — or, on phones when every batch shares a month, “B1 · 3–4”
  *  with the month carried once by the row label, so four chips fit one row. */
 function ChipText({ batch: b, short }: { batch: Batch; short: boolean }) {
   const from = addDays(b.day1, 0)

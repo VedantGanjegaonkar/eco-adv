@@ -53,7 +53,7 @@ export type Departure = {
 
 export const departures: Departure[] = [
   {
-    date: 'Thu 1 OCT 2026',
+    date: 'Fri 2 OCT 2026',
     dest: 'Harishchandragad & Ratangad',
     kind: 'Flowering special · with bhandhardhara lake side camping',
     dur: '2 days · 1 night',
