@@ -31,7 +31,9 @@ function ChipText({ batch: b, short }: { batch: Batch; short: boolean }) {
 /** Batch chips, the “Detailed timeline” button and the native <dialog> it
  *  opens. Picking a batch re-dates every day block; the dialog handles Escape
  *  and focus itself and clicking the backdrop closes it too. The button is
- *  solid on phones (it leads there) and outlined on desktop. */
+ *  solid on both layouts with a lifted shadow, so it reads as the action
+ *  here rather than a quiet link. A batch with a live `seats` count shows it
+ *  under the chips and again under the dialog's departs line. */
 export default function TimelineDialog({ programme: p }: { programme: WeekendProgramme }) {
   const t = useTranslations('treksPage.timeline')
   const ref = useRef<HTMLDialogElement>(null)
@@ -65,6 +67,7 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
     (b) => monthShort(addDays(b.day1, 0)) === firstMonth && monthShort(addDays(b.day1, 1)) === firstMonth,
   )
   const monthTag = sameMonth ? <span className="lg:hidden"> · {firstMonth}</span> : null
+  const filling = timeline.batches.flatMap((b) => (b.seats ? [{ ...b, seats: b.seats }] : []))
 
   return (
     <div className="lg:text-right">
@@ -79,12 +82,21 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
           </button>
         ))}
       </div>
+      {filling.map((b) => (
+        <p key={b.id} className="mt-2.5 mb-0 text-[13px] font-semibold text-ember-800 lg:text-[14px]">
+          {formatRange(addDays(b.day1, 0), addDays(b.day1, 1))} · {t('seatsLine', b.seats)}
+        </p>
+      ))}
       <button
         type="button"
+        aria-haspopup="dialog"
         onClick={() => open()}
-        className="mt-3 block w-full cursor-pointer rounded-[3px] border border-forest-800 bg-forest-800 px-5 py-[12px] text-center text-[16px] font-semibold text-cream hover:bg-forest-950 lg:inline-block lg:w-auto lg:bg-transparent lg:px-[30px] lg:py-[14px] lg:text-[17px] lg:text-forest-800 lg:hover:bg-forest-800 lg:hover:text-cream"
+        className="mt-3 flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-[3px] border border-forest-800 bg-forest-800 px-5 py-[14px] text-center text-[16px] font-semibold text-cream shadow-[0_6px_18px_rgba(12,42,23,.24)] transition-[background-color,box-shadow,transform] hover:-translate-y-px hover:bg-forest-950 hover:shadow-[0_10px_24px_rgba(12,42,23,.3)] active:translate-y-0 lg:inline-flex lg:w-auto lg:px-[30px] lg:py-[15px] lg:text-[17px]"
       >
         {t('open')}
+        <span aria-hidden className="text-[18px] leading-none lg:text-[19px]">
+          →
+        </span>
       </button>
 
       <dialog
@@ -141,6 +153,11 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
             <p className="mt-3 mb-0 text-[14px] text-ink-soft lg:text-[15px]">
               {t('departsLine', { from: departs, to: back })}
             </p>
+            {batch.seats && (
+              <p className="mt-1 mb-0 text-[14px] font-semibold text-ember-800 lg:text-[15px]">
+                {t('seatsLine', batch.seats)}
+              </p>
+            )}
           </div>
 
           <ol className="mt-6 flex flex-col gap-7 lg:mt-7 lg:gap-8">

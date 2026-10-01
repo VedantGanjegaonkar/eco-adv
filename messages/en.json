@@ -138,6 +138,7 @@
       "chooseBatch": "Choose your batch",
       "day": "Day {n}",
       "departsLine": "Departs {from} night · back {to} morning",
+      "seatsLine": "{booked} booked · {left, plural, one {# seat left} other {# seats left}}",
       "close": "Close",
       "included": "Included",
       "note": "Timings may shift slightly depending on weather, traffic and group pace.",
