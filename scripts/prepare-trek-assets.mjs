@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Prepare trek-programme images (covers, posters, campaign cards).
+ * Prepare trek-programme images (covers, posters, batch photos).
  *
  * Reads the raw exports (read-only, never modified) and writes web-ready JPEGs
  * into the repo:
@@ -30,8 +30,9 @@ const SETS = [
   {
     slug: 'sahyadri',
     items: [
-      // Region cover — the Harishchandragad ridge at dusk.
-      { src: `${WIN}/Downloads/harish_raw.jpeg`, out: 'cover.jpg', longEdge: 1800, quality: 82 },
+      // Region cover — the 3–4 Oct batch on the rock ledge at the top of Ratangad
+      // (replaced the Harishchandragad-at-dusk stock cover, 20 Oct 2026).
+      { src: `${WIN}/Pictures/2-3 oct/IMG20261004135510.jpg`, out: 'cover.jpg', longEdge: 2000, quality: 80 },
 
       // One-day trek posters — 9:16 story exports, dates removed (24 Sep 2026),
       // from the "Color and type pairings (2)" set. They replaced the 4:5 posters.
@@ -43,25 +44,26 @@ const SETS = [
         poster: true,
       })),
 
-      // 2D/1N Ratangad + Harishchandragad campaign cards, in the order the carousel
-      // numbers them. The social-proof card is left out. 24 Sep 2026 re-exports
-      // (dates removed) from Downloads replace the Desktop/2-3 oct meta-4250 set.
-      {
-        src: `${WIN}/Downloads/Hook · Card 1 · 1 1@1x (1).png`,
-        out: 'weekend-1-hook.jpg', longEdge: 1440, quality: 84, poster: true,
-      },
-      {
-        src: `${WIN}/Downloads/card-3-night (2).png`,
-        out: 'weekend-2-night.jpg', longEdge: 1080, quality: 86, poster: true,
-      },
-      {
-        src: `${WIN}/Downloads/card-4-day2 (1).png`,
-        out: 'weekend-3-ratangad.jpg', longEdge: 1080, quality: 86, poster: true,
-      },
-      {
-        src: `${WIN}/Downloads/Offer · Card 5 · 1 1@1x.png`,
-        out: 'weekend-4-offer.jpg', longEdge: 1440, quality: 84, poster: true,
-      },
+      // The 3–4 Oct 2026 Ratangad + Harishchandragad batch — real photos, in
+      // itinerary order, shown on the weekend programme. They replaced the four
+      // campaign cards (19 Oct 2026), which carried the old tempo-traveller plan.
+      // No names on people: file names and alt text describe the place only.
+      ...[
+        ['20261003_150221.jpg (1).jpeg', 'batch-1-temple.jpg', 1400],
+        ['20261003_151409.jpg (1).jpeg', 'batch-2-cave.jpg', 1400],
+        ['20261003_153327.jpg', 'batch-3-ridge.jpg', 1600],
+        ['20261003_160447.jpg', 'batch-4-konkankada.jpg', 1400],
+        ['night-camp-jam.png', 'batch-5-campfire.jpg', 1600],
+        ['IMG20261004133618.jpg', 'batch-6-bloom.jpg', 1400],
+        ['IMG20261004134101.jpg', 'batch-7-wall.jpg', 1400],
+        ['IMG20261004135510.jpg', 'batch-8-top.jpg', 1600],
+        ['IMG20261004184512.jpg', 'batch-9-boating.jpg', 1400],
+      ].map(([file, out, longEdge]) => ({
+        src: `${WIN}/Pictures/2-3 oct/${file}`,
+        out,
+        longEdge,
+        quality: 80,
+      })),
     ],
   },
 ]

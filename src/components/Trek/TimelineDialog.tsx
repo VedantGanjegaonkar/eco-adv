@@ -4,12 +4,14 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { whatsAppLink } from '@/lib/content'
 import { addDays, formatDay, formatRange, monthShort } from '@/lib/dates'
-import type { Batch, WeekendProgramme } from '@/lib/treks'
+import { weekendBookingMessage, type Batch, type WeekendProgramme } from '@/lib/treks'
 
 const chip =
   'flex-none cursor-pointer rounded-full border px-2.5 py-1.5 text-[13px] font-semibold whitespace-nowrap transition-colors lg:px-3 lg:text-[14px]'
 const chipIdle = `${chip} border-moss-150 bg-cream text-forest-800 hover:border-forest-800`
 const chipOn = `${chip} border-forest-800 bg-forest-800 text-cream`
+
+const seatsLine = 'text-[13px] font-semibold text-ember-800 lg:text-[14px]'
 
 /** “B1 · 3–4 Oct” — or, on phones when every batch shares a month, “B1 · 3–4”
  *  with the month carried once by the row label, so four chips fit one row. */
@@ -28,12 +30,14 @@ function ChipText({ batch: b, short }: { batch: Batch; short: boolean }) {
   )
 }
 
-/** Batch chips, the “Detailed timeline” button and the native <dialog> it
- *  opens. Picking a batch re-dates every day block; the dialog handles Escape
- *  and focus itself and clicking the backdrop closes it too. The button is
- *  solid on both layouts with a lifted shadow, so it reads as the action
- *  here rather than a quiet link. A batch with a live `seats` count shows it
- *  under the chips and again under the dialog's departs line. */
+/** The batch picker, the “Detailed timeline” button and the native <dialog>
+ *  it opens. With one batch the picker collapses to its dates and departs
+ *  line, on the page and in the dialog; with more, chips pick the batch and
+ *  re-date every day block. The dialog handles Escape and focus itself and
+ *  clicking the backdrop closes it too. The button is solid on both layouts
+ *  with a lifted shadow, so it reads as the action here rather than a quiet
+ *  link. A batch's seat count (“8 seats only”, or “5 of 8 booked · 3 left”
+ *  once `booked` is set) sits under its dates in both places. */
 export default function TimelineDialog({ programme: p }: { programme: WeekendProgramme }) {
   const t = useTranslations('treksPage.timeline')
   const ref = useRef<HTMLDialogElement>(null)
@@ -42,6 +46,7 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
   const [batchIndex, setBatchIndex] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
   const batch = timeline.batches[batchIndex]
+  const single = timeline.batches.length === 1
 
   // Lock page scroll while the dialog is up (native <dialog> does not).
   useEffect(() => {
@@ -59,39 +64,60 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
   const close = () => ref.current?.close()
 
   const days = timeline.blocks.map((b) => b.day)
-  const departs = formatDay(addDays(batch.day1, Math.min(...days) - 1))
-  const back = formatDay(addDays(batch.day1, Math.max(...days) - 1))
+  const departsLine = (b: Batch) =>
+    t('departsLine', {
+      from: formatDay(addDays(b.day1, Math.min(...days) - 1)),
+      to: formatDay(addDays(b.day1, Math.max(...days) - 1)),
+    })
+  const seatsText = (seats: NonNullable<Batch['seats']>) =>
+    seats.booked === undefined
+      ? t('seatsOnly', { total: seats.total })
+      : t('seatsLine', { booked: seats.booked, total: seats.total, left: seats.total - seats.booked })
+  const dates = (b: Batch) => formatRange(addDays(b.day1, 0), addDays(b.day1, 1))
 
   const firstMonth = monthShort(addDays(timeline.batches[0].day1, 0))
   const sameMonth = timeline.batches.every(
     (b) => monthShort(addDays(b.day1, 0)) === firstMonth && monthShort(addDays(b.day1, 1)) === firstMonth,
   )
-  const monthTag = sameMonth ? <span className="lg:hidden"> · {firstMonth}</span> : null
+  const monthTag = sameMonth && !single ? <span className="lg:hidden"> · {firstMonth}</span> : null
   const filling = timeline.batches.flatMap((b) => (b.seats ? [{ ...b, seats: b.seats }] : []))
+  const label = t('batchesLabel', { count: timeline.batches.length })
 
   return (
     <div className="lg:text-right">
       <div className="text-[11px] tracking-[.14em] text-moss-500 uppercase lg:text-[12px]">
-        {t('batchesLabel')}
+        {label}
         {monthTag}
       </div>
-      <div className="-mx-5 mt-2 flex gap-2 overflow-x-auto px-5 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0">
-        {timeline.batches.map((b, i) => (
-          <button key={b.id} type="button" onClick={() => open(i)} className={chipIdle}>
-            <ChipText batch={b} short={sameMonth} />
-          </button>
-        ))}
-      </div>
-      {filling.map((b) => (
-        <p key={b.id} className="mt-2.5 mb-0 text-[13px] font-semibold text-ember-800 lg:text-[14px]">
-          {formatRange(addDays(b.day1, 0), addDays(b.day1, 1))} · {t('seatsLine', b.seats)}
-        </p>
-      ))}
+      {single ? (
+        <>
+          <p className="mt-0.5 mb-0 font-serif text-[22px] leading-[1.15] text-forest-950 lg:mt-1 lg:text-[28px]">
+            {dates(batch)} {addDays(batch.day1, 0).getUTCFullYear()}
+          </p>
+          <p className="mt-0.5 mb-0 text-[14px] text-ink-soft lg:mt-1 lg:text-[15px]">{departsLine(batch)}</p>
+          {batch.seats && <p className={`mt-1 mb-0 ${seatsLine} lg:mt-1.5`}>{seatsText(batch.seats)}</p>}
+        </>
+      ) : (
+        <>
+          <div className="-mx-5 mt-2 flex gap-2 overflow-x-auto px-5 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0">
+            {timeline.batches.map((b, i) => (
+              <button key={b.id} type="button" onClick={() => open(i)} className={chipIdle}>
+                <ChipText batch={b} short={sameMonth} />
+              </button>
+            ))}
+          </div>
+          {filling.map((b) => (
+            <p key={b.id} className={`mt-2.5 mb-0 ${seatsLine}`}>
+              {dates(b)} · {seatsText(b.seats)}
+            </p>
+          ))}
+        </>
+      )}
       <button
         type="button"
         aria-haspopup="dialog"
         onClick={() => open()}
-        className="mt-3 flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-[3px] border border-forest-800 bg-forest-800 px-5 py-[14px] text-center text-[16px] font-semibold text-cream shadow-[0_6px_18px_rgba(12,42,23,.24)] transition-[background-color,box-shadow,transform] hover:-translate-y-px hover:bg-forest-950 hover:shadow-[0_10px_24px_rgba(12,42,23,.3)] active:translate-y-0 lg:inline-flex lg:w-auto lg:px-[30px] lg:py-[15px] lg:text-[17px]"
+        className="mt-2.5 flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-[3px] lg:mt-3 border border-forest-800 bg-forest-800 px-5 py-[14px] text-center text-[16px] font-semibold text-cream shadow-[0_6px_18px_rgba(12,42,23,.24)] transition-[background-color,box-shadow,transform] hover:-translate-y-px hover:bg-forest-950 hover:shadow-[0_10px_24px_rgba(12,42,23,.3)] active:translate-y-0 lg:inline-flex lg:w-auto lg:px-[30px] lg:py-[15px] lg:text-[17px]"
       >
         {t('open')}
         <span aria-hidden className="text-[18px] leading-none lg:text-[19px]">
@@ -131,33 +157,35 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
             </button>
           </div>
 
-          {/* Batch picker — re-dates the blocks below */}
+          {/* Batch — picker when there are several, the dates when there is one */}
           <div className="mt-6 border-t border-line pt-5">
             <div className="text-[12px] tracking-[.14em] text-moss-500 uppercase">
-              {t('chooseBatch')}
+              {single ? label : t('chooseBatch')}
               {monthTag}
             </div>
-            <div role="group" aria-label={t('chooseBatch')} className="mt-2.5 flex gap-2 overflow-x-auto lg:flex-wrap">
-              {timeline.batches.map((b, i) => (
-                <button
-                  key={b.id}
-                  type="button"
-                  aria-pressed={i === batchIndex}
-                  onClick={() => setBatchIndex(i)}
-                  className={i === batchIndex ? chipOn : chipIdle}
-                >
-                  <ChipText batch={b} short={sameMonth} />
-                </button>
-              ))}
-            </div>
-            <p className="mt-3 mb-0 text-[14px] text-ink-soft lg:text-[15px]">
-              {t('departsLine', { from: departs, to: back })}
-            </p>
-            {batch.seats && (
-              <p className="mt-1 mb-0 text-[14px] font-semibold text-ember-800 lg:text-[15px]">
-                {t('seatsLine', batch.seats)}
+            {single ? (
+              <p className="mt-1.5 mb-0 font-serif text-[22px] leading-[1.15] text-forest-950 lg:text-[24px]">
+                {dates(batch)} {addDays(batch.day1, 0).getUTCFullYear()}
               </p>
+            ) : (
+              <div role="group" aria-label={t('chooseBatch')} className="mt-2.5 flex gap-2 overflow-x-auto lg:flex-wrap">
+                {timeline.batches.map((b, i) => (
+                  <button
+                    key={b.id}
+                    type="button"
+                    aria-pressed={i === batchIndex}
+                    onClick={() => setBatchIndex(i)}
+                    className={i === batchIndex ? chipOn : chipIdle}
+                  >
+                    <ChipText batch={b} short={sameMonth} />
+                  </button>
+                ))}
+              </div>
             )}
+            <p className={`${single ? 'mt-1' : 'mt-3'} mb-0 text-[14px] text-ink-soft lg:text-[15px]`}>
+              {departsLine(batch)}
+            </p>
+            {batch.seats && <p className={`mt-1 mb-0 ${seatsLine} lg:text-[15px]`}>{seatsText(batch.seats)}</p>}
           </div>
 
           <ol className="mt-6 flex flex-col gap-7 lg:mt-7 lg:gap-8">
@@ -174,7 +202,7 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
                   {block.items.map((item) => (
                     <li
                       key={item.time + item.what}
-                      className="grid grid-cols-[76px_1fr] gap-x-3 text-[15px] leading-[1.5] lg:grid-cols-[84px_1fr] lg:text-[16px]"
+                      className="grid grid-cols-[88px_1fr] gap-x-3 text-[15px] leading-[1.5] lg:grid-cols-[96px_1fr] lg:text-[16px]"
                     >
                       <span className="font-semibold whitespace-nowrap text-ember-800">{item.time}</span>
                       <span className="text-ink">{item.what}</span>
@@ -188,7 +216,7 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
           <div className="mt-7 border-t border-line pt-5 lg:mt-8">
             <div className="text-[12px] tracking-[.14em] text-moss-500 uppercase">{t('included')}</div>
             <ul className="mt-2.5 flex flex-wrap gap-2">
-              {timeline.included.map((item) => (
+              {p.included.map((item) => (
                 <li
                   key={item}
                   className="rounded-full border border-moss-150 px-3 py-1 text-[14px] font-semibold text-forest-800"
@@ -197,16 +225,21 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
                 </li>
               ))}
             </ul>
-            <p className="mt-4 mb-0 text-[14px] leading-[1.5] text-ink-soft">{t('note')}</p>
+            <p className="mt-3 mb-0 text-[14px] leading-[1.5] text-ink-soft">
+              <span className="font-semibold text-ink">{t('notIncluded')}:</span> {p.notIncluded.join(' · ')}
+            </p>
+            <p className="mt-2 mb-0 text-[14px] leading-[1.5] text-ink-soft">{t('note')}</p>
           </div>
 
           <div className="mt-7 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <span className="block">
-              <span className="block text-[24px] leading-none font-bold text-forest-950">{p.price}</span>
+              <span className="block text-[24px] leading-none font-bold text-forest-950">
+                {p.price} <span className="text-[14px] font-normal text-ink-soft">{p.priceNote}</span>
+              </span>
               <span className="mt-1 block text-[14px] text-ember-800">{p.advance}</span>
             </span>
             <a
-              href={whatsAppLink(p.whatsAppKeyword)}
+              href={whatsAppLink(weekendBookingMessage(p, batch))}
               target="_blank"
               rel="noopener noreferrer"
               className="block rounded-[3px] bg-ember-600 px-5 py-[13px] text-center text-[16px] font-semibold whitespace-nowrap hover:bg-ember-800 lg:inline-block lg:px-[30px] lg:py-[14px] lg:text-[17px]"

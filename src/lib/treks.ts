@@ -6,18 +6,25 @@
  * next/image gets width, height and a blur placeholder for free. Prices and
  * WhatsApp keywords match the posters and the departures table in content.ts.
  *
- * The weekend carries its detailed timeline (opened from a button); `itinerary`
- * on each one-day trek is still an empty slot, rendered only once filled.
+ * The weekend carries its plan, price facts and detailed timeline (opened from
+ * a button) plus photos from the last batch; `itinerary` on each one-day trek
+ * is still an empty slot, rendered only once filled.
  */
 import type { StaticImageData } from 'next/image'
+import { addDays, formatRange } from '@/lib/dates'
 import cover from '@/assets/treks/sahyadri/cover.jpg'
 import dayNaneghat from '@/assets/treks/sahyadri/day-naneghat.jpg'
 import dayHarish from '@/assets/treks/sahyadri/day-harishchandragad.jpg'
 import dayAadrai from '@/assets/treks/sahyadri/day-aadrai.jpg'
-import weekendHook from '@/assets/treks/sahyadri/weekend-1-hook.jpg'
-import weekendNight from '@/assets/treks/sahyadri/weekend-2-night.jpg'
-import weekendRatangad from '@/assets/treks/sahyadri/weekend-3-ratangad.jpg'
-import weekendOffer from '@/assets/treks/sahyadri/weekend-4-offer.jpg'
+import batchTemple from '@/assets/treks/sahyadri/batch-1-temple.jpg'
+import batchCave from '@/assets/treks/sahyadri/batch-2-cave.jpg'
+import batchRidge from '@/assets/treks/sahyadri/batch-3-ridge.jpg'
+import batchKonkankada from '@/assets/treks/sahyadri/batch-4-konkankada.jpg'
+import batchCampfire from '@/assets/treks/sahyadri/batch-5-campfire.jpg'
+import batchBloom from '@/assets/treks/sahyadri/batch-6-bloom.jpg'
+import batchWall from '@/assets/treks/sahyadri/batch-7-wall.jpg'
+import batchTop from '@/assets/treks/sahyadri/batch-8-top.jpg'
+import batchBoating from '@/assets/treks/sahyadri/batch-9-boating.jpg'
 
 export type DayTrek = {
   key: string
@@ -32,25 +39,33 @@ export type DayTrek = {
   itinerary: string[]
 }
 
-export type WeekendCard = { src: StaticImageData; alt: string }
+/** A photo from a batch that ran. Orientation comes from the image itself;
+ *  captions name the place and the day, never the people. */
+export type BatchPhoto = { src: StaticImageData; alt: string; caption: string }
 
 export type TimelineItem = { time: string; what: string }
 
 /** One stretch of the trip — a day, or a named part of one. `day` counts from
- *  the trek's Day 1, so Day 0 is the departure night; dates come from the batch. */
-export type TimelineBlock = { day: number; label?: string; title: string; items: TimelineItem[] }
+ *  the trek's Day 1, so Day 0 is the departure night; dates come from the batch.
+ *  `summary` is the one-line version shown in the plan on the page. */
+export type TimelineBlock = {
+  day: number
+  label?: string
+  title: string
+  summary: string
+  items: TimelineItem[]
+}
 
 /** A departure. `day1` is the ISO date of the trek's Day 1 — the weekday of
  *  every block follows from it, so a batch on any weekday needs no special
- *  casing. `seats` is the live count for a batch that is filling up; leave it
- *  off (or remove it) when there is nothing to say. */
-export type Batch = { id: string; day1: string; seats?: { booked: number; left: number } }
+ *  casing. `seats` is the batch size; add `booked` once seats start going and
+ *  the page shows how many are left instead. */
+export type Batch = { id: string; day1: string; seats?: { total: number; booked?: number } }
 
 export type Timeline = {
   heading: string
   batches: Batch[]
   blocks: TimelineBlock[]
-  included: string[]
 }
 
 export type WeekendProgramme = {
@@ -58,11 +73,20 @@ export type WeekendProgramme = {
   kind: string
   dur: string
   price: string
+  /** Qualifies the price — “per person, all-in”. */
+  priceNote: string
   advance: string
   whatsAppKeyword: string
-  /** The campaign cards, in carousel order. */
-  cards: WeekendCard[]
-  /** Generic timings (no dates) — every October weekend runs to this shape. */
+  included: string[]
+  notIncluded: string[]
+  difficulty: string
+  /** Booking terms, one line each. */
+  booking: string[]
+  /** Which batch the photos are from — “the 3–4 Oct batch”. */
+  photosFrom: string
+  /** Photos from that batch, in itinerary order. */
+  photos: BatchPhoto[]
+  /** Day-by-day timings — every batch runs to this shape; dates come from the batch. */
   timeline: Timeline
 }
 
@@ -77,6 +101,13 @@ export type TrekRegion = {
   dayTreks: DayTrek[]
 }
 
+/** Prefilled WhatsApp text for the weekend: the keyword, the batch dates and
+ *  the two things a booking needs (name, seats), as the post asks for. */
+export function weekendBookingMessage(p: WeekendProgramme, batch: Batch): string {
+  const dates = formatRange(addDays(batch.day1, 0), addDays(batch.day1, 1))
+  return `${p.whatsAppKeyword} · ${dates}\nName: \nSeats: `
+}
+
 export const sahyadri: TrekRegion = {
   slug: 'sahyadri',
   title: 'Sahyadri',
@@ -85,106 +116,157 @@ export const sahyadri: TrekRegion = {
     'Three one-day treks and a two-day lakeside weekend in the Western Ghats, overnight train both ways from Vadodara.',
   cover,
   coverAlt:
-    'The Harishchandragad ridge at dusk — yellow wildflowers in the foreground, cliffs falling away into the valley',
+    'The whole batch sitting in a row on a rock ledge at the top of Ratangad, the fort cliffs and the valley behind them',
 
   weekend: {
     title: 'Ratangad + Harishchandragad',
-    kind: '2 forts, 1 lake · camping',
+    kind: '2 forts, 1 lake · lakeside camping · by train, ex-Vadodara',
     dur: '2 days · 1 night',
     price: '₹4,250',
+    priceNote: 'per person, all-in',
     advance: '₹1,800 advance',
     whatsAppKeyword: 'RATANGAD',
-    cards: [
+    included: [
+      'Train Vadodara ⇄ Dadar',
+      'All local transfers',
+      'Tents & sleeping bags',
+      'Boating on the lake',
+      'Forest entry',
+      'All meals at the campsite, Sat breakfast to Sun dinner',
+    ],
+    notIncluded: [
+      'All meals outside the campsite — on the train and on the road — your own',
+      'Personal expenses, anything not listed',
+    ],
+    difficulty:
+      'Moderate. 3–4 hrs walking a day, a few steep and ladder sections. Beginners with basic fitness welcome. Age 18+.',
+    booking: [
+      '8 seats only — small batch, no exceptions',
+      '₹1,800 advance via UPI, balance on the train',
+      'Refundable till 20 Oct',
+      'Solo trekkers welcome — most of the last batch came alone',
+    ],
+    photosFrom: 'the 3–4 Oct batch',
+    photos: [
       {
-        src: weekendHook,
-        alt: 'The Sahyadri Weekend — 2 forts, 1 lake. Harishchandragad + Ratangad, 2D/1N, ₹4,250, Vadodara and Surat departure',
+        src: batchTemple,
+        caption: 'Sat · Harishchandreshwar temple',
+        alt: 'The carved stone shikhara of Harishchandreshwar temple on Harishchandragad against a blue sky, a trekker seated on its steps',
       },
       {
-        src: weekendNight,
-        alt: 'Your night in the Sahyadris — the Bhandardara lakeside camp timetable: reach camp at 4pm, sunset by the water, campfire and BBQ, sunrise boating, depart for Ratangad at 8am',
+        src: batchCave,
+        caption: 'Sat · Kedareshwar cave',
+        alt: 'Kedareshwar cave on Harishchandragad — the Shivling on its single surviving pillar, trekkers wading through the knee-deep water around it',
       },
       {
-        src: weekendRatangad,
-        alt: 'Day 2, Ratangad — a trekker beside the fort pond under a bare tree, yellow flowers in bloom',
+        src: batchRidge,
+        caption: 'Sat · Towards Konkan Kada',
+        alt: 'Trekkers on a red-earth trail across the Harishchandragad plateau, yellow wildflowers on both sides and the Sahyadri ranges behind',
       },
       {
-        src: weekendOffer,
-        alt: '₹4,250 all in, per person: return transport from Vadodara and Surat, lakeside tent camping at Bhandardara with boating, forest entry, all meals',
+        src: batchKonkankada,
+        caption: 'Sat · Konkan Kada',
+        alt: 'A trekker at the edge of Konkan Kada pointing out across the valley, the concave cliff falling away behind, flowers in the foreground',
+      },
+      {
+        src: batchCampfire,
+        caption: 'Sat night · Campfire at the lake',
+        alt: 'The batch around a campfire at night between the tents of the Bhandardara lakeside camp, arms up, mid-song',
+      },
+      {
+        src: batchBloom,
+        caption: 'Sun · Ratangad in bloom',
+        alt: 'A trekker lying back in a slope of yellow wildflowers on Ratangad, a lone bare tree on the ridge above',
+      },
+      {
+        src: batchWall,
+        caption: 'Sun · The Sahyadri wall from Ratangad',
+        alt: 'A trekker leaning on a railing on Ratangad, looking out at the layered cliffs of the Sahyadri wall',
+      },
+      {
+        src: batchTop,
+        caption: 'Sun · The batch at the top',
+        alt: 'The whole batch sitting in a row on a rock ledge at the top of Ratangad, the fort cliffs and the valley behind them',
+      },
+      {
+        src: batchBoating,
+        caption: 'Sun · Sunset boating, Bhandardara',
+        alt: 'The batch in a canopied boat on Bhandardara lake at sunset, the sky orange over the hills',
       },
     ],
     timeline: {
       heading: 'Harishchandragad + Bhandardara camping + Ratangad',
-      // Day 1 dates. Every batch is Sat–Sun, departing Friday night.
-      batches: [
-        { id: 'B1', day1: '2026-10-03', seats: { booked: 13, left: 3 } },
-        { id: 'B2', day1: '2026-10-10' },
-        { id: 'B3', day1: '2026-10-17' },
-        { id: 'B4', day1: '2026-10-24' },
-      ],
+      // Day 1 date. One batch left this season — Sat–Sun, out on the Friday-night train.
+      batches: [{ id: 'B1', day1: '2026-10-24', seats: { total: 8 } }],
+      // Only the train has a clock time; the rest is by part of day until the
+      // batch's own timings are confirmed.
       blocks: [
         {
           day: 0,
           label: 'Departure night',
           title: 'Out of Gujarat',
+          summary: 'Ekta Nagar–Dadar Express leaves Vadodara (BRC) at 10:50 PM',
           items: [
-            { time: '9:30 PM', what: 'Departure from Vadodara (tempo traveller)' },
-            { time: '11:30 PM', what: 'Departure from Surat' },
+            {
+              time: '10:50 PM',
+              what: 'Ekta Nagar–Dadar Express leaves Vadodara (BRC). Meals in transit are your own.',
+            },
           ],
         },
         {
           day: 1,
           title: 'Harishchandragad',
+          summary: 'Harishchandreshwar temple, Kedareshwar cave, Konkan Kada',
           items: [
-            { time: '7:30 AM', what: 'Freshen-up halt near Nashik' },
-            { time: '9:30 AM', what: 'Reach base village · breakfast & change' },
-            { time: '10:00 AM', what: 'Start trek (easy, approx. 1.5 hrs)' },
-            { time: '11:30 AM', what: 'Reach the top' },
+            { time: 'Early AM', what: 'Reach Dadar · road transfer to the base village' },
+            { time: 'Morning', what: 'Breakfast at base, change, start the climb (approx. 1.5 hrs up)' },
             {
-              time: '12:00 PM',
-              what: 'Explore Konkankada cliff and Kedareshwar Cave (the Shivling standing on a single pillar)',
+              time: 'Midday',
+              what: 'Harishchandreshwar temple and Kedareshwar cave (the Shivling standing on a single pillar)',
             },
-            { time: '2:30 PM', what: 'Start descent' },
-            { time: '3:30 PM', what: 'Lunch at base' },
-            { time: '4:30 PM', what: 'Depart for Bhandardara lakeside camp' },
+            {
+              time: 'Afternoon',
+              what: 'Konkan Kada, the cliff edge · descend · lunch at base · drive to the Bhandardara lakeside camp',
+            },
           ],
         },
         {
           day: 1,
           label: 'Evening',
           title: 'Your night in the Sahyadris',
+          summary: 'Lakeside tents at Bhandardara, campfire & BBQ',
           items: [
-            { time: '6:00 PM', what: 'Reach camp · tea & snacks with sunset by the water' },
-            { time: '8:00 PM', what: 'Campfire, BBQ & music' },
-            { time: '9:30 PM', what: 'Dinner under the open sky' },
+            { time: 'Evening', what: 'Reach camp · tea & snacks with sunset by the water' },
+            { time: 'Night', what: 'Campfire, BBQ & music · dinner under the open sky · tents and sleeping bags' },
           ],
         },
         {
           day: 2,
           title: 'Ratangad',
+          summary: 'The fort in bloom (flowering season, last few weeks) · sunset boating on the lake',
           items: [
-            { time: '6:30 AM', what: 'Sunrise boating at Bhandardara dam lake' },
-            { time: '7:30 AM', what: 'Breakfast' },
-            { time: '8:30 AM', what: 'Depart for Ratangad' },
-            { time: '9:30 AM', what: 'Start trek (7 km, approx. 3 hrs)' },
-            { time: '12:30 PM', what: 'Reach the fort top' },
-            { time: '1:00 PM', what: 'Soak in the Jewel of the Sahyadris, carpeted in blooming wildflowers' },
-            { time: '3:30 PM', what: 'Start descent' },
-            { time: '5:00 PM', what: 'Reach base · late lunch / early dinner' },
-            { time: '6:00 PM', what: 'Necklace Waterfall on the way back (complimentary)' },
-            { time: '7:00 PM', what: 'Start return journey to Gujarat' },
+            {
+              time: 'Morning',
+              what: 'Breakfast at camp · drive to the Ratangad base · start the climb (7 km, approx. 3 hrs, a few steep and ladder sections)',
+            },
+            {
+              time: 'Afternoon',
+              what: 'The fort in bloom, the last weeks of the flowering season · descend · late lunch / early dinner at base',
+            },
+            { time: 'Sunset', what: 'Boating on Bhandardara lake' },
+            { time: 'Night', what: 'Transfer to the station · return train to Vadodara' },
           ],
         },
         {
           day: 3,
           label: 'Morning',
           title: 'Home',
+          summary: 'Off the return train in Vadodara on Monday morning',
           items: [
-            { time: '4:30 AM', what: 'Reach Surat' },
-            { time: '6:30 AM', what: 'Reach Vadodara, with a phone full of photos and a mind full of memories' },
+            { time: 'Morning', what: 'Reach Vadodara, with a phone full of photos and a mind full of memories' },
           ],
         },
       ],
-      included: ['Tent stay', 'Campfire', 'BBQ', 'Dinner', 'Breakfast', 'Boating', 'Travel'],
     },
   },
 

@@ -3,12 +3,15 @@ import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import type { TrekRegion } from '@/lib/treks'
 
-/** Region cover with the title set into the scrim — the home hero's idiom. */
+/** Region cover with the title set into the scrim — the home hero's idiom.
+ *  Short on phones so the weekend's batch and timeline button land in the
+ *  first screen; the cover's focal point sits low (the batch on the ledge),
+ *  hence the object position for the wide desktop crop. */
 export default function TrekHero({ trek }: { trek: TrekRegion }) {
   const t = useTranslations('treksPage')
 
   return (
-    <section className="relative h-[460px] lg:h-[640px]">
+    <section className="relative h-[280px] lg:h-[640px]">
       <Image
         src={trek.cover}
         alt={trek.coverAlt}
@@ -16,7 +19,7 @@ export default function TrekHero({ trek }: { trek: TrekRegion }) {
         priority
         placeholder="blur"
         sizes="100vw"
-        className="object-cover"
+        className="object-cover object-[50%_70%]"
       />
 
       {/* Scrims — vertical on mobile, left-to-right on desktop */}
@@ -30,7 +33,7 @@ export default function TrekHero({ trek }: { trek: TrekRegion }) {
       />
 
       <div className="absolute inset-0">
-        <div className="mx-auto flex h-full max-w-[1440px] flex-col justify-between px-5 pt-4 pb-[26px] lg:px-14 lg:pt-7 lg:pb-[72px]">
+        <div className="mx-auto flex h-full max-w-[1440px] flex-col justify-between px-5 pt-4 pb-5 lg:px-14 lg:pt-7 lg:pb-[72px]">
           <Link
             href="/treks"
             className="group self-start text-[12px] font-semibold tracking-[.12em] uppercase [text-shadow:0_1px_8px_rgba(12,42,23,.6)] lg:text-[13px]"
@@ -42,10 +45,10 @@ export default function TrekHero({ trek }: { trek: TrekRegion }) {
             <div className="text-[12px] tracking-[.14em] text-sand-300 uppercase lg:text-[13px] lg:tracking-[.16em]">
               {trek.region}
             </div>
-            <h1 className="m-0 mt-2 font-serif text-[44px] leading-[1.06] font-normal text-cream lg:mt-[18px] lg:text-[76px] lg:leading-[1.04]">
+            <h1 className="m-0 mt-1.5 font-serif text-[40px] leading-[1.06] font-normal text-cream lg:mt-[18px] lg:text-[76px] lg:leading-[1.04]">
               {trek.title}
             </h1>
-            <p className="mt-3 mb-0 max-w-[480px] text-[17px] leading-[1.55] text-moss-200 lg:mt-5 lg:text-[20px] lg:leading-[1.6]">
+            <p className="mt-2 mb-0 max-w-[480px] text-[15px] leading-[1.5] text-moss-200 lg:mt-5 lg:text-[20px] lg:leading-[1.6]">
               {trek.summary}
             </p>
           </div>

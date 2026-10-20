@@ -53,13 +53,13 @@ export type Departure = {
 
 export const departures: Departure[] = [
   {
-    date: 'Fri 2 OCT 2026',
+    date: 'Fri 23 OCT 2026',
     dest: 'Harishchandragad & Ratangad',
-    kind: 'Flowering special · with bhandhardhara lake side camping',
+    kind: 'Flower season’s last weeks · Bhandardara lakeside camping · by train',
     dur: '2 days · 1 night',
     grade: 'Moderate',
     price: '₹4,250',
-    spots: '₹1,800 advance',
+    spots: '8 seats · ₹1,800 advance',
     whatsAppKeyword: 'RATANGAD',
   },
   {
