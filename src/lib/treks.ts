@@ -79,6 +79,8 @@ export type WeekendProgramme = {
   whatsAppKeyword: string
   included: string[]
   notIncluded: string[]
+  /** The one line people ask about — which meals are in, which are not. */
+  mealsNote: string
   difficulty: string
   /** Booking terms, one line each. */
   booking: string[]
@@ -132,12 +134,14 @@ export const sahyadri: TrekRegion = {
       'Tents & sleeping bags',
       'Boating on the lake',
       'Forest entry',
-      'All meals at the campsite, Sat breakfast to Sun dinner',
+      'Campsite meals: Sat dinner and Sun breakfast',
     ],
     notIncluded: [
-      'All meals outside the campsite — on the train and on the road — your own',
+      'All other meals — on the train, on the road and at the base village — your own',
       'Personal expenses, anything not listed',
     ],
+    mealsNote:
+      'Only Saturday night’s dinner and Sunday morning’s breakfast at the campsite are included. Every other meal — on the train, on the road, at the base village — is your own.',
     difficulty:
       'Moderate. 3–4 hrs walking a day, a few steep and ladder sections. Beginners with basic fitness welcome. Age 18+.',
     booking: [
@@ -219,14 +223,14 @@ export const sahyadri: TrekRegion = {
           summary: 'Harishchandreshwar temple, Kedareshwar cave, Konkan Kada',
           items: [
             { time: 'Early AM', what: 'Reach Dadar · road transfer to the base village' },
-            { time: 'Morning', what: 'Breakfast at base, change, start the climb (approx. 1.5 hrs up)' },
+            { time: 'Morning', what: 'Breakfast at base (your own), change, start the climb (approx. 1.5 hrs up)' },
             {
               time: 'Midday',
               what: 'Harishchandreshwar temple and Kedareshwar cave (the Shivling standing on a single pillar)',
             },
             {
               time: 'Afternoon',
-              what: 'Konkan Kada, the cliff edge · descend · lunch at base · drive to the Bhandardara lakeside camp',
+              what: 'Konkan Kada, the cliff edge · descend · lunch at base (your own) · drive to the Bhandardara lakeside camp',
             },
           ],
         },
@@ -251,7 +255,7 @@ export const sahyadri: TrekRegion = {
             },
             {
               time: 'Afternoon',
-              what: 'The fort in bloom, the last weeks of the flowering season · descend · late lunch / early dinner at base',
+              what: 'The fort in bloom, the last weeks of the flowering season · descend · late lunch / early dinner at base (your own)',
             },
             { time: 'Sunset', what: 'Boating on Bhandardara lake' },
             { time: 'Night', what: 'Transfer to the station · return train to Vadodara' },

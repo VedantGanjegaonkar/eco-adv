@@ -146,6 +146,7 @@ export default function WeekendProgramme({ programme: p }: { programme: Programm
                 </li>
               ))}
             </ul>
+            <p className="mt-3 mb-0 text-[13px] leading-[1.5] text-ink-soft lg:text-[14px]">{p.mealsNote}</p>
 
             <div className="mt-5 border-t border-line pt-4">
               <Label>{t('difficultyLabel')}</Label>

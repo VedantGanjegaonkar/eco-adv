@@ -228,6 +228,7 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
             <p className="mt-3 mb-0 text-[14px] leading-[1.5] text-ink-soft">
               <span className="font-semibold text-ink">{t('notIncluded')}:</span> {p.notIncluded.join(' · ')}
             </p>
+            <p className="mt-2 mb-0 text-[14px] leading-[1.5] text-ink-soft">{p.mealsNote}</p>
             <p className="mt-2 mb-0 text-[14px] leading-[1.5] text-ink-soft">{t('note')}</p>
           </div>
 
