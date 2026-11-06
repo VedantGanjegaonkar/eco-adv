@@ -1,56 +1,45 @@
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { site, whatsAppLink } from '@/lib/content'
 import { addDays, formatDay } from '@/lib/dates'
 import TimelineDialog from './TimelineDialog'
+import BatchPhotos from './BatchPhotos'
 import { weekendBookingMessage, type WeekendProgramme as Programme } from '@/lib/treks'
-
-const portraitSizes = '(min-width:1440px) 314px, (min-width:1024px) 24vw, 64vw'
-const landscapeSizes = '(min-width:1440px) 652px, (min-width:1024px) 48vw, 86vw'
-
-/** On desktop every tile takes one row height — a portrait column's 3:4 —
- *  worked out from the grid's own width (container units), so a landscape
- *  tile spanning two columns lines up with the portraits beside it at any
- *  viewport. On phones tiles keep their natural shape and sit top-aligned. */
-const tileHeight = 'lg:h-[calc((100cqw_-_72px)/4*4/3)]'
-
-function Photo({ photo }: { photo: Programme['photos'][number] }) {
-  const landscape = photo.src.width > photo.src.height
-  return (
-    <li
-      className={`relative flex-none snap-start overflow-hidden rounded-[4px] bg-line lg:w-auto ${tileHeight} ${
-        landscape ? 'w-[86vw] lg:col-span-2' : 'w-[64vw]'
-      }`}
-    >
-      <figure className="m-0 h-full">
-        <Image
-          src={photo.src}
-          alt={photo.alt}
-          sizes={landscape ? landscapeSizes : portraitSizes}
-          placeholder="blur"
-          className="h-auto w-full lg:h-full lg:object-cover"
-        />
-        <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,rgba(12,42,23,0)_0%,rgba(12,42,23,.72)_100%)] px-3 pt-8 pb-2.5 text-[12px] font-semibold tracking-[.04em] text-cream lg:px-4 lg:pb-3 lg:text-[13px]">
-          {photo.caption}
-        </figcaption>
-      </figure>
-    </li>
-  )
-}
 
 function Label({ children }: { children: React.ReactNode }) {
   return <div className="text-[11px] tracking-[.14em] text-moss-500 uppercase lg:text-[12px]">{children}</div>
 }
 
+/** A short list under a label — good to know, what to pack. */
+function Notes({ label, lines }: { label: string; lines: string[] }) {
+  return (
+    <div>
+      <Label>{label}</Label>
+      <ul className="mt-3 flex flex-col gap-2 text-[15px] leading-[1.5] text-ink lg:text-[16px]">
+        {lines.map((line) => (
+          <li key={line} className="flex gap-2.5">
+            <span aria-hidden className="w-4 flex-none text-moss-500">
+              –
+            </span>
+            {line}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 /** The programme running now — 2D/1N by train. Header with the batch and the
  *  timeline button; photos from the last batch (swipe on phones, a four-column
- *  wall on desktop); then the plan beside the price, inclusions and booking
- *  terms, with WhatsApp as the single call to action. */
+ *  wall on desktop); then the plan — with good-to-know and packing notes under
+ *  it — beside the price, inclusions and booking terms, with WhatsApp as the
+ *  single call to action. */
 export default function WeekendProgramme({ programme: p }: { programme: Programme }) {
   const t = useTranslations('treksPage.weekend')
   // The plan is dated for the first batch; the dialog re-dates it per batch.
   const batch = p.timeline.batches[0]
   const bookingHref = whatsAppLink(weekendBookingMessage(p, batch))
+  const goodToKnow = p.goodToKnow ?? []
+  const packing = p.packing ?? []
 
   return (
     <section id="weekend" className="scroll-mt-4 border-b border-line bg-cream">
@@ -86,14 +75,7 @@ export default function WeekendProgramme({ programme: p }: { programme: Programm
             </h3>
             <p className="mt-1 mb-0 text-[14px] text-ink-soft lg:mt-0 lg:text-[16px]">{t('photosSub')}</p>
           </div>
-          <ul
-            aria-label={t('photosLabel')}
-            className="@container -mx-5 mt-3 flex snap-x snap-mandatory items-start gap-3 overflow-x-auto px-5 pb-2 [-webkit-overflow-scrolling:touch] lg:mx-0 lg:mt-6 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0"
-          >
-            {p.photos.map((photo) => (
-              <Photo key={photo.src.src} photo={photo} />
-            ))}
-          </ul>
+          <BatchPhotos photos={p.photos} label={t('photosLabel')} />
         </div>
 
         {/* The plan beside the facts */}
@@ -121,6 +103,13 @@ export default function WeekendProgramme({ programme: p }: { programme: Programm
                 </li>
               ))}
             </ol>
+
+            {(goodToKnow.length > 0 || packing.length > 0) && (
+              <div className="mt-8 grid gap-8 lg:mt-12 lg:grid-cols-2 lg:gap-10">
+                {goodToKnow.length > 0 && <Notes label={t('goodToKnowLabel')} lines={goodToKnow} />}
+                {packing.length > 0 && <Notes label={t('packingLabel')} lines={packing} />}
+              </div>
+            )}
           </div>
 
           <aside className="rounded-[4px] border border-line bg-cream-hover p-5 lg:p-7">

@@ -35,7 +35,7 @@ export default function Departures() {
         <div className="px-5 pt-3.5 pb-[30px]">
           {departures.map((d) => (
             <Link
-              key={d.dest}
+              key={d.date + d.dest}
               href="/treks/sahyadri"
               className="block border-t border-line py-4"
             >
@@ -104,7 +104,7 @@ export default function Departures() {
         </div>
         {departures.map((d) => (
           <Link
-            key={d.dest}
+            key={d.date + d.dest}
             href="/treks/sahyadri"
             className="grid grid-cols-[150px_1fr_170px_130px_140px_180px] items-center gap-x-6 border-b border-line py-[22px] hover:bg-cream-hover"
           >

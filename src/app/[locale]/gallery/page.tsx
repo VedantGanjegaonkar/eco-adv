@@ -6,6 +6,7 @@ import GalleryMotionProvider from '@/components/Gallery/GalleryMotionProvider'
 import ScrubHero from '@/components/Gallery/ScrubHero'
 import RiseField from '@/components/Gallery/RiseField'
 import CloseBand from '@/components/Gallery/CloseBand'
+import AlbumsBand from '@/components/Gallery/AlbumsBand'
 import { naneghat } from '@/lib/gallery'
 
 type Props = {
@@ -42,6 +43,7 @@ export default async function GalleryPage({ params }: Props) {
           <ScrubHero />
           <RiseField />
         </GalleryMotionProvider>
+        <AlbumsBand />
         <CloseBand />
       </main>
       <Footer />

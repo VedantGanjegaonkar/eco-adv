@@ -52,15 +52,26 @@ export type Departure = {
 }
 
 export const departures: Departure[] = [
+  // The Sahyadri Weekend — dates are the Friday-night departures of B1 and B2.
   {
-    date: 'Fri 23 OCT 2026',
-    dest: 'Harishchandragad & Ratangad',
-    kind: 'Flower season’s last weeks · Bhandardara lakeside camping · by train',
+    date: 'Fri 13 NOV 2026',
+    dest: 'Sandhan Valley + Harishchandragad',
+    kind: 'The Sahyadri Weekend · B1 · Bhandardara lakeside camp · by train',
     dur: '2 days · 1 night',
     grade: 'Moderate',
     price: '₹4,250',
     spots: '8 seats · ₹1,800 advance',
-    whatsAppKeyword: 'RATANGAD',
+    whatsAppKeyword: 'SANDHAN',
+  },
+  {
+    date: 'Fri 20 NOV 2026',
+    dest: 'Sandhan Valley + Harishchandragad',
+    kind: 'The Sahyadri Weekend · B2 · Bhandardara lakeside camp · by train',
+    dur: '2 days · 1 night',
+    grade: 'Moderate',
+    price: '₹4,250',
+    spots: '8 seats · ₹1,800 advance',
+    whatsAppKeyword: 'SANDHAN',
   },
   {
     date: 'Sat 22 Aug',
