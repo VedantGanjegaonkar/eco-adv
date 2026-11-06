@@ -127,13 +127,14 @@
     "dayTreksFact": "{count} one-day treks · 31 hrs door to door",
     "weekend": {
       "eyebrow": "The Sahyadri Weekend · two November batches · by train",
-      "eyebrowMobile": "The Sahyadri Weekend · by train",
+      "eyebrowMobile": "The Sahyadri Weekend",
       "photosHeading": "From {from}",
       "photosSub": "Real photos from our last batch. No stock, no filters. Solo trekkers welcome.",
       "photosLabel": "Photos from the last batch",
       "planLabel": "The plan",
       "difficultyLabel": "Difficulty",
       "bookingLabel": "Booking",
+      "includedLabel": "What’s included",
       "goodToKnowLabel": "Good to know",
       "packingLabel": "What to pack",
       "whatsAppCta": "WhatsApp ‘{keyword}’",
@@ -152,7 +153,11 @@
       "included": "Included",
       "notIncluded": "Not included",
       "note": "Timings may shift slightly depending on weather, traffic and group pace.",
-      "whatsAppCta": "WhatsApp ‘{keyword}’"
+      "whatsAppCta": "WhatsApp ‘{keyword}’",
+      "factPrice": "Price",
+      "factPriceSub": "all in",
+      "factSeats": "Seats",
+      "factSeatsSub": "per batch"
     },
     "day": {
       "eyebrow": "One-day treks · 31 hrs door to door",

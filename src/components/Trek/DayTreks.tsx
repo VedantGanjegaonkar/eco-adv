@@ -22,13 +22,13 @@ export default function DayTreks({ treks }: { treks: DayTrek[] }) {
               {t('heading')}
             </h2>
           </div>
-          <p className="mt-2 mb-0 max-w-[520px] text-[15px] leading-[1.5] text-moss-300 lg:mt-0 lg:text-right lg:text-[17px]">
+          <p className="mt-3 mb-0 max-w-[520px] text-[14px] leading-[1.6] text-moss-300 lg:mt-0 lg:text-right lg:text-[17px] lg:leading-[1.5]">
             {t('explainer')}
           </p>
         </div>
 
         {/* Phones: swipe strip. Desktop: three story posters side by side. */}
-        <ol className="-mx-5 mt-6 flex snap-x snap-mandatory items-start gap-4 overflow-x-auto px-5 pb-2 [-webkit-overflow-scrolling:touch] lg:mx-0 lg:mt-10 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0">
+        <ol className="-mx-5 mt-6 flex snap-x snap-mandatory scroll-px-5 items-start gap-4 overflow-x-auto px-5 pb-2 [-webkit-overflow-scrolling:touch] lg:mx-0 lg:mt-10 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0">
           {treks.map((trek, i) => (
             <li key={trek.key} className="flex w-[72vw] flex-none snap-start flex-col lg:w-auto">
               <div className="relative overflow-hidden rounded-[4px] bg-forest-900">

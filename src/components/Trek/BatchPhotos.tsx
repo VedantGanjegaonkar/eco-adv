@@ -41,7 +41,7 @@ export default function BatchPhotos({ photos, label }: { photos: BatchPhoto[]; l
   return (
     <ul
       aria-label={label}
-      className="@container -mx-5 mt-3 flex snap-x snap-mandatory items-start gap-3 overflow-x-auto px-5 pb-2 [-webkit-overflow-scrolling:touch] lg:mx-0 lg:mt-6 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0"
+      className="@container -mx-5 mt-3 flex snap-x snap-mandatory scroll-px-5 items-start gap-3 overflow-x-auto px-5 pb-2 [-webkit-overflow-scrolling:touch] lg:mx-0 lg:mt-6 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0"
     >
       {photos.map((photo) => (
         <Photo key={photo.src.src} photo={photo} />
