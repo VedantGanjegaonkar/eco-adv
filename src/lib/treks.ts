@@ -74,6 +74,8 @@ export type Timeline = {
 export type WeekendProgramme = {
   title: string
   kind: string
+  /** The phone header's meta line, after the duration — “by train from Vadodara”. */
+  kindShort?: string
   dur: string
   price: string
   /** Qualifies the price — “per person, all-in”. */
@@ -129,6 +131,7 @@ export const sahyadri: TrekRegion = {
   weekend: {
     title: 'Sandhan Valley + Harishchandragad',
     kind: 'The Sahyadri Weekend · Kokankada, a Bhandardara lakeside camp, the Sandhan canyon · by train, ex-Vadodara',
+    kindShort: 'by train from Vadodara',
     dur: '2 days · 1 night',
     price: '₹4,250',
     priceNote: 'per person, all in, Vadodara to Vadodara',

@@ -12,6 +12,7 @@ const chipIdle = `${chip} border-moss-150 bg-cream text-forest-800 hover:border-
 const chipOn = `${chip} border-forest-800 bg-forest-800 text-cream`
 
 const seatsLine = 'text-[13px] font-semibold text-ember-800 lg:text-[14px]'
+const factLabel = 'text-[10px] font-semibold tracking-[.16em] text-moss-500 uppercase'
 
 /** “B1 · 3–4 Oct” — or, on phones when every batch shares a month, “B1 · 3–4”
  *  with the month carried once by the row label, so four chips fit one row. */
@@ -37,7 +38,9 @@ function ChipText({ batch: b, short }: { batch: Batch; short: boolean }) {
  *  clicking the backdrop closes it too. The button is solid on both layouts
  *  with a lifted shadow, so it reads as the action here rather than a quiet
  *  link. A batch's seat count (“8 seats only”, or “5 of 8 booked · 3 left”
- *  once `booked` is set) sits under its dates in both places. */
+ *  once `booked` is set) sits under its dates in both places. On phones the
+ *  page shows a single row of facts — dates, price, seats — and a flat
+ *  button instead, so the header reads calmly before the photos. */
 export default function TimelineDialog({ programme: p }: { programme: WeekendProgramme }) {
   const t = useTranslations('treksPage.timeline')
   const ref = useRef<HTMLDialogElement>(null)
@@ -82,42 +85,87 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
   const monthTag = sameMonth && !single ? <span className="lg:hidden"> · {firstMonth}</span> : null
   const filling = timeline.batches.flatMap((b) => (b.seats ? [{ ...b, seats: b.seats }] : []))
   const label = t('batchesLabel', { count: timeline.batches.length })
+  // Phones show one row of facts — dates · price · seats. Seats fit that row
+  // only while every batch has the same size and none has started filling;
+  // otherwise each batch's seat line sits under the row instead.
+  const uniformSeats =
+    filling.length === timeline.batches.length &&
+    filling.every((b) => b.seats.booked === undefined && b.seats.total === filling[0].seats.total)
+      ? filling[0].seats.total
+      : null
 
   return (
     <div className="lg:text-right">
-      <div className="text-[11px] tracking-[.14em] text-moss-500 uppercase lg:text-[12px]">
-        {label}
-        {monthTag}
-      </div>
-      {single ? (
-        <>
-          <p className="mt-0.5 mb-0 font-serif text-[22px] leading-[1.15] text-forest-950 lg:mt-1 lg:text-[28px]">
-            {dates(batch)} {addDays(batch.day1, 0).getUTCFullYear()}
-          </p>
-          <p className="mt-0.5 mb-0 text-[14px] text-ink-soft lg:mt-1 lg:text-[15px]">{departsLine(batch)}</p>
-          {batch.seats && <p className={`mt-1 mb-0 ${seatsLine} lg:mt-1.5`}>{seatsText(batch.seats)}</p>}
-        </>
-      ) : (
-        <>
-          <div className="-mx-5 mt-2 flex gap-2 overflow-x-auto px-5 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0">
-            {timeline.batches.map((b, i) => (
-              <button key={b.id} type="button" onClick={() => open(i)} className={chipIdle}>
-                <ChipText batch={b} short={sameMonth} />
-              </button>
-            ))}
-          </div>
-          {filling.map((b) => (
-            <p key={b.id} className={`mt-2.5 mb-0 ${seatsLine}`}>
-              {dates(b)} · {seatsText(b.seats)}
-            </p>
+      {/* Phones: one quiet row of facts instead of label, chips and seat lines */}
+      <dl
+        className={`m-0 grid border-y border-line lg:hidden ${
+          uniformSeats === null ? 'grid-cols-[1.4fr_1fr]' : 'grid-cols-[1.45fr_1fr_.7fr]'
+        }`}
+      >
+        <div className="py-4 pr-3">
+          <dt className={factLabel}>{label}</dt>
+          {timeline.batches.map((b) => (
+            <dd key={b.id} className="m-0 mt-1.5 flex items-baseline gap-2">
+              <span className="text-[11px] font-semibold tracking-[.08em] text-moss-500">{b.id}</span>
+              <span className="font-serif text-[18px] leading-[1.2] text-forest-950">{dates(b)}</span>
+            </dd>
           ))}
-        </>
-      )}
+        </div>
+        <div className="border-l border-line px-3 py-4">
+          <dt className={factLabel}>{t('factPrice')}</dt>
+          <dd className="m-0 mt-1.5 font-serif text-[24px] leading-none text-forest-950">{p.price}</dd>
+          <dd className="m-0 mt-1.5 text-[12px] leading-[1.35] text-ink-soft">{t('factPriceSub')}</dd>
+        </div>
+        {uniformSeats !== null && (
+          <div className="border-l border-line py-4 pl-3">
+            <dt className={factLabel}>{t('factSeats')}</dt>
+            <dd className="m-0 mt-1.5 font-serif text-[24px] leading-none text-forest-950">{uniformSeats}</dd>
+            <dd className="m-0 mt-1.5 text-[12px] leading-[1.35] text-ink-soft">{t('factSeatsSub')}</dd>
+          </div>
+        )}
+      </dl>
+      {uniformSeats === null &&
+        filling.map((b) => (
+          <p key={b.id} className="mt-2 mb-0 text-[13px] text-ink-soft lg:hidden">
+            {dates(b)} · {seatsText(b.seats)}
+          </p>
+        ))}
+
+      <div className="hidden lg:block">
+        <div className="text-[11px] tracking-[.14em] text-moss-500 uppercase lg:text-[12px]">
+          {label}
+          {monthTag}
+        </div>
+        {single ? (
+          <>
+            <p className="mt-0.5 mb-0 font-serif text-[22px] leading-[1.15] text-forest-950 lg:mt-1 lg:text-[28px]">
+              {dates(batch)} {addDays(batch.day1, 0).getUTCFullYear()}
+            </p>
+            <p className="mt-0.5 mb-0 text-[14px] text-ink-soft lg:mt-1 lg:text-[15px]">{departsLine(batch)}</p>
+            {batch.seats && <p className={`mt-1 mb-0 ${seatsLine} lg:mt-1.5`}>{seatsText(batch.seats)}</p>}
+          </>
+        ) : (
+          <>
+            <div className="-mx-5 mt-2 flex gap-2 overflow-x-auto px-5 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0">
+              {timeline.batches.map((b, i) => (
+                <button key={b.id} type="button" onClick={() => open(i)} className={chipIdle}>
+                  <ChipText batch={b} short={sameMonth} />
+                </button>
+              ))}
+            </div>
+            {filling.map((b) => (
+              <p key={b.id} className={`mt-2.5 mb-0 ${seatsLine}`}>
+                {dates(b)} · {seatsText(b.seats)}
+              </p>
+            ))}
+          </>
+        )}
+      </div>
       <button
         type="button"
         aria-haspopup="dialog"
         onClick={() => open()}
-        className="mt-2.5 flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-[3px] lg:mt-3 border border-forest-800 bg-forest-800 px-5 py-[14px] text-center text-[16px] font-semibold text-cream shadow-[0_6px_18px_rgba(12,42,23,.24)] transition-[background-color,box-shadow,transform] hover:-translate-y-px hover:bg-forest-950 hover:shadow-[0_10px_24px_rgba(12,42,23,.3)] active:translate-y-0 lg:inline-flex lg:w-auto lg:px-[30px] lg:py-[15px] lg:text-[17px]"
+        className="mt-5 flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-[3px] border border-forest-800 bg-forest-800 px-5 py-[13px] text-center text-[15px] font-semibold tracking-[.01em] text-cream transition-[background-color,box-shadow,transform] hover:bg-forest-950 lg:mt-3 lg:inline-flex lg:w-auto lg:px-[30px] lg:py-[15px] lg:text-[17px] lg:shadow-[0_6px_18px_rgba(12,42,23,.24)] lg:hover:-translate-y-px lg:hover:shadow-[0_10px_24px_rgba(12,42,23,.3)] lg:active:translate-y-0"
       >
         {t('open')}
         <span aria-hidden className="text-[18px] leading-none lg:text-[19px]">
