@@ -5,8 +5,8 @@
  * Reads the raw exports (read-only, never modified) and writes web-ready JPEGs
  * into the repo:
  *
- *   src/assets/treks/<slug>/   imported statically by src/lib/treks.ts so
- *                              next/image gets width/height/blur for free
+ *   src/assets/<dir>/   imported statically by src/lib/treks.ts and
+ *                       src/lib/albums.ts so next/image gets width/height/blur
  *
  * All EXIF/XMP/ICC is stripped. Posters are text-heavy, so they are encoded
  * without chroma subsampling to keep the type crisp. sharp ships with next.
@@ -28,11 +28,17 @@ const CREAM = '#FFFDF8'
 
 const SETS = [
   {
-    slug: 'sahyadri',
+    dir: 'treks/sahyadri',
     items: [
-      // Region cover — the 3–4 Oct batch on the rock ledge at the top of Ratangad
-      // (replaced the Harishchandragad-at-dusk stock cover, 20 Oct 2026).
-      { src: `${WIN}/Pictures/2-3 oct/IMG20261004135510.jpg`, out: 'cover.jpg', longEdge: 2000, quality: 80 },
+      // Region cover — the Bhandardara lakeside camp at sunrise, 25 Oct 2026
+      // batch (replaced the Ratangad ledge cover, 6 Nov 2026 — that one now
+      // heads the Ratangad gallery album).
+      {
+        src: `${WIN}/Downloads/04-tents-lakeside.jpg`,
+        out: 'cover.jpg',
+        longEdge: 2000,
+        quality: 80,
+      },
 
       // One-day trek posters — 9:16 story exports, dates removed (24 Sep 2026),
       // from the "Color and type pairings (2)" set. They replaced the 4:5 posters.
@@ -44,10 +50,39 @@ const SETS = [
         poster: true,
       })),
 
-      // The 3–4 Oct 2026 Ratangad + Harishchandragad batch — real photos, in
-      // itinerary order, shown on the weekend programme. They replaced the four
-      // campaign cards (19 Oct 2026), which carried the old tempo-traveller plan.
-      // No names on people: file names and alt text describe the place only.
+      // The Sahyadri Weekend (Sandhan Valley + Harishchandragad) — real photos
+      // from the 24–25 Oct 2026 batch, in itinerary order (EXIF times), the
+      // same originals as the 6 Nov carousel. The lakeside-camp photo is the
+      // region cover, so it is not repeated here. No names on people: file names
+      // and alt text describe the place only.
+      ...[
+        ['07-kokankada-feet-over-edge.jpg', 'weekend-01-kokankada.jpg', 1400],
+        ['05-fire-skewer.jpg', 'weekend-02-bonfire.jpg', 1400],
+        ['06a-jeep-group-selfie.jpg', 'weekend-04-jeep.jpg', 1400],
+        ['06b-jeep-bonnet-feet.jpg', 'weekend-05-lake-road.jpg', 1400],
+        ['01-cover-canyon-3-trekkers.jpg', 'weekend-07-canyon.jpg', 1400],
+        ['03b-portrait-light-beam.jpg', 'weekend-08-light.jpg', 1400],
+        ['00-spare-canyon-wide.jpg', 'weekend-09-walls.jpg', 1400],
+        ['02-raft-water-crossing.jpg', 'weekend-10-raft.jpg', 1400],
+      ].map(([file, out, longEdge]) => ({
+        src: `${WIN}/Downloads/${file}`,
+        out,
+        longEdge,
+        quality: 80,
+      })),
+    ],
+  },
+  {
+    // The Ratangad + Harishchandragad weekend, archived to the photo gallery
+    // (6 Nov 2026) when the Sandhan Valley weekend replaced it on the trek page.
+    dir: 'gallery/ratangad',
+    items: [
+      // Album cover — the 3–4 Oct batch on the rock ledge at the top of Ratangad
+      // (the Sahyadri region cover from 20 Oct to 6 Nov 2026).
+      { src: `${WIN}/Pictures/2-3 oct/IMG20261004135510.jpg`, out: 'cover.jpg', longEdge: 2000, quality: 80 },
+
+      // The 3–4 Oct 2026 batch — real photos, in itinerary order. They replaced
+      // the four campaign cards (19 Oct 2026), which carried the old tempo-traveller plan.
       ...[
         ['20261003_150221.jpg (1).jpeg', 'batch-1-temple.jpg', 1400],
         ['20261003_151409.jpg (1).jpeg', 'batch-2-cave.jpg', 1400],
@@ -89,17 +124,17 @@ async function exists(p) {
 }
 
 async function prepare(set) {
-  const outDir = path.join(root, 'src/assets/treks', set.slug)
+  const outDir = path.join(root, 'src/assets', set.dir)
   await fs.mkdir(outDir, { recursive: true })
 
   for (const item of set.items) {
     const outPath = path.join(outDir, item.out)
     if (!cli.force && (await exists(outPath))) {
-      console.log(`  = ${set.slug}/${item.out} (exists, skip)`)
+      console.log(`  = ${set.dir}/${item.out} (exists, skip)`)
       continue
     }
     if (cli.check) {
-      console.log(`  ? ${set.slug}/${item.out} would be written from ${item.src}`)
+      console.log(`  ? ${set.dir}/${item.out} would be written from ${item.src}`)
       continue
     }
     const pipeline = sharp(item.src, { failOn: 'error' })
@@ -112,11 +147,11 @@ async function prepare(set) {
         chromaSubsampling: item.poster ? '4:4:4' : '4:2:0',
       })
     const info = await pipeline.toFile(outPath)
-    console.log(`  + ${set.slug}/${item.out} ${info.width}×${info.height} ${(info.size / 1024).toFixed(0)} KB`)
+    console.log(`  + ${set.dir}/${item.out} ${info.width}×${info.height} ${(info.size / 1024).toFixed(0)} KB`)
   }
 }
 
 for (const set of SETS) {
-  console.log(`treks/${set.slug}`)
+  console.log(set.dir)
   await prepare(set)
 }

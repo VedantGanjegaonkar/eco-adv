@@ -118,7 +118,7 @@
   "treksPage": {
     "meta": {
       "title": "Treks · Eco Adventure & Sports Society",
-      "description": "Where we are taking groups this season: one-day treks and a lakeside weekend in the Sahyadri, overnight train both ways from Vadodara."
+      "description": "Where we are taking groups this season: one-day treks and the Sahyadri Weekend — Harishchandragad, a Bhandardara lakeside camp and Sandhan Valley — overnight train both ways from Vadodara."
     },
     "heading": "Treks",
     "sub": "Where we are taking groups this season. Overnight train both ways, ex Vadodara — boarding also at Ahmedabad and Surat.",
@@ -126,14 +126,16 @@
     "allTreks": "All treks",
     "dayTreksFact": "{count} one-day treks · 31 hrs door to door",
     "weekend": {
-      "eyebrow": "Flower season’s last weeks · by train · running now",
-      "eyebrowMobile": "Last flowering batch · by train",
+      "eyebrow": "The Sahyadri Weekend · two November batches · by train",
+      "eyebrowMobile": "The Sahyadri Weekend · by train",
       "photosHeading": "From {from}",
-      "photosSub": "Real photos from the batch that ran. Solo trekkers welcome — most of them came alone.",
+      "photosSub": "Real photos from our last batch. No stock, no filters. Solo trekkers welcome.",
       "photosLabel": "Photos from the last batch",
       "planLabel": "The plan",
       "difficultyLabel": "Difficulty",
       "bookingLabel": "Booking",
+      "goodToKnowLabel": "Good to know",
+      "packingLabel": "What to pack",
       "whatsAppCta": "WhatsApp ‘{keyword}’",
       "whatsAppHelp": "Send your name + number of seats to {phone}. We’ll confirm and share the payment link."
     },
@@ -217,6 +219,25 @@
       "eyebrow": "Next departure",
       "heading": "Next time the water goes up.",
       "cta": "Check details →"
+    },
+    "albums": {
+      "eyebrow": "More from the trail",
+      "heading": "Albums from batches that ran",
+      "open": "See the album →"
     }
+  },
+  "albumPage": {
+    "metaTitle": "{title} — Photo gallery · Eco Adventure & Sports Society",
+    "back": "Gallery",
+    "eyebrow": "Photo gallery · {where} · {when}",
+    "photosHeading": "From {from}",
+    "photosSub": "Real photos from the batch that ran.",
+    "photosLabel": "Photos from the batch",
+    "planLabel": "The plan, as it ran",
+    "day": "Day {n}",
+    "factsLabel": "What it included",
+    "difficultyLabel": "Difficulty",
+    "nextEyebrow": "This weekend now runs as",
+    "nextCta": "See the new plan →"
   }
 }
