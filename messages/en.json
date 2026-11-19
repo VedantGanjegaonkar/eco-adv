@@ -264,6 +264,8 @@
     "nextEyebrow": "Next batch · {from} – {to}",
     "againEyebrow": "The weekend runs again",
     "nextCta": "See the plan & book →",
-    "allAlbums": "All albums"
+    "allAlbums": "All albums",
+    "soundOn": "Sound on",
+    "soundOff": "Sound off"
   }
 }

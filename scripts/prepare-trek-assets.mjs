@@ -161,10 +161,23 @@ const SETS = [
   },
 ]
 
-/** Short muted loops: trimmed, cropped, re-encoded small, no audio. `crop` is
- *  in the source's displayed (rotation-applied) pixels; the poster, written
- *  under src/assets/, is the clip's first frame. */
+/** Short loops: trimmed, cropped, re-encoded small. Audio is dropped unless
+ *  `audio` is set. `crop` (optional) is in the source's displayed
+ *  (rotation-applied) pixels; the poster, written under src/assets/, is the
+ *  clip's first frame. */
 const CLIPS = [
+  {
+    // Sat 14 Nov, the Dadar–Kasara local — the batch clapping along to a song.
+    // Kept whole (14 s, already small) and with its sound: the song is the point.
+    src: `${WIN}/Desktop/sandhan-14-NOV/jaba-jaba-in-local.mp4`,
+    out: 'gallery/sandhan-14-nov/local.mp4',
+    poster: 'gallery/sandhan-14-nov/00-local-poster.jpg',
+    ss: 0,
+    t: 14.03,
+    size: '478:850',
+    fps: 30,
+    audio: true,
+  },
   {
     // Breakfast, Sun 15 Nov — poha on a wood-fired chulha. 14 s → the 5 s
     // with the wok on the fire and the haldi going in.
@@ -261,12 +274,15 @@ async function prepareClip(clip) {
   const ffmpeg = await ffmpegBin()
   await fs.mkdir(path.dirname(outPath), { recursive: true })
   await fs.mkdir(path.dirname(posterPath), { recursive: true })
-  const vf = `crop=${clip.crop},scale=${clip.size}:flags=lanczos,fps=${clip.fps},format=yuv420p`
+  const vf = [clip.crop && `crop=${clip.crop}`, `scale=${clip.size}:flags=lanczos`, `fps=${clip.fps}`, 'format=yuv420p']
+    .filter(Boolean)
+    .join(',')
   // prettier-ignore
   await run(ffmpeg, [
     '-hide_banner', '-loglevel', 'error', '-y',
     '-ss', String(clip.ss), '-t', String(clip.t), '-i', clip.src,
-    '-an', '-map_metadata', '-1', '-vf', vf,
+    ...(clip.audio ? ['-c:a', 'aac', '-b:a', '96k', '-ac', '2'] : ['-an']),
+    '-map_metadata', '-1', '-vf', vf,
     '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'slow', '-crf', '27',
     '-maxrate', '1800k', '-bufsize', '3600k', '-movflags', '+faststart',
     outPath,
