@@ -38,7 +38,9 @@ function ChipText({ batch: b, short }: { batch: Batch; short: boolean }) {
  *  clicking the backdrop closes it too. The button is solid on both layouts
  *  with a lifted shadow, so it reads as the action here rather than a quiet
  *  link. A batch's seat count (“8 seats only”, or “5 of 8 booked · 3 left”
- *  once `booked` is set) sits under its dates in both places. On phones the
+ *  once `booked` is set) shows in the dialog under the chosen batch, and in
+ *  the single-batch header; with several batches the header shows only the
+ *  chips (the booking terms carry the batch size). On phones the
  *  page shows a single row of facts — dates, price, seats — and a flat
  *  button instead, so the header reads calmly before the photos. */
 export default function TimelineDialog({ programme: p }: { programme: WeekendProgramme }) {
@@ -87,7 +89,7 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
   const label = t('batchesLabel', { count: timeline.batches.length })
   // Phones show one row of facts — dates · price · seats. Seats fit that row
   // only while every batch has the same size and none has started filling;
-  // otherwise each batch's seat line sits under the row instead.
+  // otherwise the seats column is dropped.
   const uniformSeats =
     filling.length === timeline.batches.length &&
     filling.every((b) => b.seats.booked === undefined && b.seats.total === filling[0].seats.total)
@@ -124,12 +126,6 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
           </div>
         )}
       </dl>
-      {uniformSeats === null &&
-        filling.map((b) => (
-          <p key={b.id} className="mt-2 mb-0 text-[13px] text-ink-soft lg:hidden">
-            {dates(b)} · {seatsText(b.seats)}
-          </p>
-        ))}
 
       <div className="hidden lg:block">
         <div className="text-[11px] tracking-[.14em] text-moss-500 uppercase lg:text-[12px]">
@@ -153,11 +149,6 @@ export default function TimelineDialog({ programme: p }: { programme: WeekendPro
                 </button>
               ))}
             </div>
-            {filling.map((b) => (
-              <p key={b.id} className={`mt-2.5 mb-0 ${seatsLine}`}>
-                {dates(b)} · {seatsText(b.seats)}
-              </p>
-            ))}
           </>
         )}
       </div>

@@ -1,7 +1,7 @@
 /**
  * Trek programmes by region. One region this season — Sahyadri, Maharashtra —
- * with the Sahyadri Weekend (Sandhan Valley + Harishchandragad, two November
- * batches) and the three one-day treks under it. The October Ratangad weekend
+ * with the Sahyadri Weekend (Sandhan Valley + Harishchandragad, every weekend
+ * to the end of December) and the three one-day treks under it. The October Ratangad weekend
  * it replaced lives on as a photo album: see src/lib/albums.ts.
  *
  * Images are static imports (written by scripts/prepare-trek-assets.mjs) so
@@ -25,9 +25,11 @@ import wkBonfire from '@/assets/treks/sahyadri/weekend-02-bonfire.jpg'
 import wkJeep from '@/assets/treks/sahyadri/weekend-04-jeep.jpg'
 import wkLakeRoad from '@/assets/treks/sahyadri/weekend-05-lake-road.jpg'
 import wkCanyon from '@/assets/treks/sahyadri/weekend-07-canyon.jpg'
-import wkLight from '@/assets/treks/sahyadri/weekend-08-light.jpg'
 import wkWalls from '@/assets/treks/sahyadri/weekend-09-walls.jpg'
 import wkRaft from '@/assets/treks/sahyadri/weekend-10-raft.jpg'
+import wkKokankadaSunset from '@/assets/treks/sahyadri/weekend-03-kokankada-sunset.jpg'
+import wkRappel from '@/assets/treks/sahyadri/weekend-11-rappel.jpg'
+import wkRappelRope from '@/assets/treks/sahyadri/weekend-11a-rappel-rope.jpg'
 
 export type DayTrek = {
   key: string
@@ -45,6 +47,15 @@ export type DayTrek = {
 /** A photo from a batch that ran. Orientation comes from the image itself;
  *  captions name the place and the day, never the people. */
 export type BatchPhoto = { src: StaticImageData; alt: string; caption: string }
+
+export type PhotoHighlight = {
+  eyebrow: string
+  title: string
+  line: string
+  photos: BatchPhoto[]
+  /** The gallery album the photos come from, for the “see the album” link. */
+  albumSlug?: string
+}
 
 export type TimelineItem = { time: string; what: string }
 
@@ -96,6 +107,9 @@ export type WeekendProgramme = {
   photosFrom: string
   /** Photos from that batch, in itinerary order. */
   photos: BatchPhoto[]
+  /** One moment given its own block above the photo wall — big photos, a
+   *  short line, and a link to the batch's album. */
+  highlight?: PhotoHighlight
   /** Day-by-day timings — every batch runs to this shape; dates come from the batch. */
   timeline: Timeline
 }
@@ -137,22 +151,23 @@ export const sahyadri: TrekRegion = {
     priceNote: 'per person, all in, Vadodara to Vadodara',
     advance: '₹1,800 advance',
     whatsAppKeyword: 'SANDHAN',
-    // The first four lines match card 8 and the caption word for word.
+    // The first four lines match card 8 and the caption word for word. Meals and
+    // rappelling updated 19 Nov 2026 (Amruteshwar temple + boating dropped).
     included: [
       'Train tickets Vadodara–Dadar (sleeper) both ways + all local transport, incl. Dadar–Kasara local',
       'Open-jeep transfers between Kasara, the trailheads and the lake',
       'Lakeside tent camping at Bhandardara + bonfire',
       'Forest entry charges',
-      'Campsite meals (Day 1 dinner, Day 2 breakfast)',
-      'Amruteshwar temple visit + boating',
+      'Meals: Day 1 dinner and Day 2 breakfast at the camp, Day 2 lunch',
+      'Rappelling charges in Sandhan Valley',
       'EASS trek lead and local guides throughout',
     ],
     notIncluded: [
-      'All other meals outside the campsite — we halt for food on the trek and during travel; what you eat is your own choice',
+      'All other meals — we halt for food on the trek and during travel; what you eat is your own choice',
       'Anything not listed above',
     ],
     mealsNote:
-      'Only Saturday night’s dinner and Sunday morning’s breakfast at the camp are included. We halt for food on the trek and during travel; what you eat there is your own choice and cost.',
+      'Saturday night’s dinner and Sunday’s breakfast at the camp, and Sunday’s lunch, are included. For every other meal we halt for food on the trek and during travel; what you eat there is your own choice and cost.',
     difficulty:
       'Moderate. Two trek days back to back — a steep climb on Day 1, scrambling and water on Day 2. Minimum age 15.',
     goodToKnow: [
@@ -174,14 +189,39 @@ export const sahyadri: TrekRegion = {
     booking: [
       '8 seats per batch — small batch, no exceptions',
       '₹1,800 advance via UPI, balance on the train',
-      'Both batches close when full',
+      'Every batch closes when full',
     ],
-    photosFrom: 'the 24–25 Oct batch',
+    // Seven from 24–25 Oct and the Kokankada sunset from 14–15 Nov make the
+    // wall; the 14–15 Nov rappel gets its own block above it (19 Nov 2026).
+    photosFrom: 'the 24–25 Oct and 14–15 Nov batches',
+    highlight: {
+      eyebrow: 'New on the 14–15 Nov batch',
+      title: 'Rappelling in Sandhan Valley',
+      line: 'Harness, helmet and twin ropes down the rock wall in the valley, with the guides at the top and the bottom.',
+      albumSlug: 'sandhan-valley-14-nov-2026',
+      photos: [
+        {
+          src: wkRappelRope,
+          caption: 'Sun · On the rope',
+          alt: 'A trekker in a red helmet on the twin ropes near the foot of the rappel wall in Sandhan Valley, trees and sky above',
+        },
+        {
+          src: wkRappel,
+          caption: 'Sun · Down',
+          alt: 'A trekker in a red helmet and harness at the foot of the rappel wall in Sandhan Valley, arms flung wide, ropes coiled on the rock',
+        },
+      ],
+    },
     photos: [
       {
         src: wkKokankada,
         caption: 'Sat · Kokankada, Harishchandragad',
         alt: 'A trekker’s feet hanging over the edge of Kokankada, a sharp ridge and pinnacle falling away into the haze far below',
+      },
+      {
+        src: wkKokankadaSunset,
+        caption: 'Sat · Sunset at Kokankada',
+        alt: 'A trekker sitting on the rock at Kokankada at sunset, hair blowing in the wind, the sun low over the hazy Sahyadri ranges',
       },
       {
         src: wkBonfire,
@@ -204,11 +244,6 @@ export const sahyadri: TrekRegion = {
         alt: 'Three trekkers on the boulders of the Sandhan canyon floor, sheer rock walls on both sides and a shaft of light at the far end',
       },
       {
-        src: wkLight,
-        caption: 'Sun · Light through the canyon',
-        alt: 'A trekker in a cap standing on a rock in a shallow stream inside Sandhan Valley, sunlight pouring through the gap in the walls above',
-      },
-      {
         src: wkWalls,
         caption: 'Sun · 200 ft of rock either side',
         alt: 'Sandhan Valley from the canyon floor — two towering rock walls, a narrow strip of sky and small figures with arms raised among the boulders',
@@ -221,10 +256,16 @@ export const sahyadri: TrekRegion = {
     ],
     timeline: {
       heading: 'Harishchandragad + Bhandardara camping + Sandhan Valley',
-      // Day 1 dates. Two batches, both Sat–Sun, out on the Friday-night sleeper.
+      // Day 1 dates — every weekend from 28 Nov to the end of December, Sat–Sun,
+      // out on the Friday-night sleeper. B1 (14–15 Nov) has run: it is the
+      // gallery album now. The 21–22 Nov batch was cancelled (19 Nov 2026), so
+      // B2 is 28 Nov; booking messages carry the dates, not the id.
       batches: [
-        { id: 'B1', day1: '2026-11-14', seats: { total: 8 } },
-        { id: 'B2', day1: '2026-11-21', seats: { total: 8 } },
+        { id: 'B2', day1: '2026-11-28', seats: { total: 8 } },
+        { id: 'B3', day1: '2026-12-05', seats: { total: 8 } },
+        { id: 'B4', day1: '2026-12-12', seats: { total: 8 } },
+        { id: 'B5', day1: '2026-12-19', seats: { total: 8 } },
+        { id: 'B6', day1: '2026-12-26', seats: { total: 8 } },
       ],
       // Only the outbound train has clock times; the rest is by part of day
       // until the return train and the day's timings are confirmed.
@@ -271,14 +312,14 @@ export const sahyadri: TrekRegion = {
         {
           day: 2,
           title: 'Sandhan Valley',
-          summary: 'The canyon — rope, raft, waist-deep · Amruteshwar temple and boating',
+          summary: 'The canyon — rope, raft, waist-deep · rappelling down the valley wall',
           items: [
             { time: 'Early AM', what: 'Breakfast at camp · open jeeps along the lake to the Sandhan trailhead' },
             {
               time: 'Morning',
-              what: 'Descend into the valley of shadows — a canyon about 200 ft deep and 3 ft wide. Rope sections, boulder scrambles and the water crossings: rope, raft, waist-deep.',
+              what: 'Descend into the valley of shadows — a canyon about 200 ft deep and 3 ft wide. Rope sections, boulder scrambles and the water crossings: rope, raft, waist-deep. Rappelling down the valley wall — harness, helmet and ropes, with the guides.',
             },
-            { time: 'Afternoon', what: 'The ancient Amruteshwar temple at the base of Ratangad · boating on the lake' },
+            { time: 'Afternoon', what: 'Out of the valley · lunch (included)' },
             {
               time: 'Evening',
               what: 'Jeeps to Kasara · local to Dadar (Mumbai participants leave here) · the sleeper home',

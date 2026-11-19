@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Header from '@/components/Common/Header'
 import Footer from '@/components/Common/Footer'
 import Album from '@/components/Gallery/Album'
+import StoryAlbum from '@/components/Gallery/StoryAlbum'
 import { albums, findAlbum } from '@/lib/albums'
 
 type Props = {
@@ -47,7 +48,7 @@ export default async function AlbumPage({ params }: Props) {
     <>
       <Header />
       <main>
-        <Album album={album} />
+        {album.kind === 'story' ? <StoryAlbum album={album} /> : <Album album={album} />}
       </main>
       <Footer />
     </>
