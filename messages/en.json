@@ -126,11 +126,11 @@
     "allTreks": "All treks",
     "dayTreksFact": "{count} one-day treks · 31 hrs door to door",
     "weekend": {
-      "eyebrow": "The Sahyadri Weekend · two November batches · by train",
+      "eyebrow": "The Sahyadri Weekend · every weekend till December · by train",
       "eyebrowMobile": "The Sahyadri Weekend",
       "photosHeading": "From {from}",
-      "photosSub": "Real photos from our last batch. No stock, no filters. Solo trekkers welcome.",
-      "photosLabel": "Photos from the last batch",
+      "photosSub": "Real photos from our last two batches. No stock, no filters. Solo trekkers welcome.",
+      "photosLabel": "Photos from our last two batches",
       "planLabel": "The plan",
       "difficultyLabel": "Difficulty",
       "bookingLabel": "Booking",
@@ -138,7 +138,8 @@
       "goodToKnowLabel": "Good to know",
       "packingLabel": "What to pack",
       "whatsAppCta": "WhatsApp ‘{keyword}’",
-      "whatsAppHelp": "Send your name + number of seats to {phone}. We’ll confirm and share the payment link."
+      "whatsAppHelp": "Send your name + number of seats to {phone}. We’ll confirm and share the payment link.",
+      "highlightAlbumCta": "See the full album →"
     },
     "timeline": {
       "open": "Detailed timeline",
@@ -228,7 +229,7 @@
     "albums": {
       "eyebrow": "More from the trail",
       "heading": "Albums from batches that ran",
-      "open": "See the album →"
+      "open": "Open →"
     }
   },
   "albumPage": {
@@ -244,5 +245,25 @@
     "difficultyLabel": "Difficulty",
     "nextEyebrow": "This weekend now runs as",
     "nextCta": "See the new plan →"
+  },
+  "galleryIndex": {
+    "meta": {
+      "title": "Photo gallery · Eco Adventure & Sports Society",
+      "description": "Real photos from treks that ran — Sandhan Valley in November, Ratangad in October, the Naneghat reverse waterfall in August."
+    },
+    "eyebrow": "Photo gallery",
+    "heading": "From the trail",
+    "sub": "Real photos from batches that ran — no stock, no filters. Pick a trek to open its album.",
+    "open": "Open →",
+    "nextLine": "Want to be in the next album?",
+    "nextCta": "See the Sahyadri weekend →"
+  },
+  "storyAlbum": {
+    "back": "Gallery",
+    "contents": "In this album",
+    "nextEyebrow": "Next batch · {from} – {to}",
+    "againEyebrow": "The weekend runs again",
+    "nextCta": "See the plan & book →",
+    "allAlbums": "All albums"
   }
 }

@@ -3,6 +3,7 @@ import { site, whatsAppLink } from '@/lib/content'
 import { addDays, formatDay } from '@/lib/dates'
 import TimelineDialog from './TimelineDialog'
 import BatchPhotos from './BatchPhotos'
+import PhotoHighlight from './PhotoHighlight'
 import { weekendBookingMessage, type WeekendProgramme as Programme } from '@/lib/treks'
 
 function Label({ children }: { children: React.ReactNode }) {
@@ -127,6 +128,7 @@ export default function WeekendProgramme({ programme: p }: { programme: Programm
             </h3>
             <p className="mt-1 mb-0 hidden text-[16px] text-ink-soft lg:mt-0 lg:block">{t('photosSub')}</p>
           </div>
+          {p.highlight && <PhotoHighlight highlight={p.highlight} albumCta={t('highlightAlbumCta')} />}
           <BatchPhotos photos={p.photos} label={t('photosLabel')} />
         </div>
 
