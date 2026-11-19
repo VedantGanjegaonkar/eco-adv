@@ -26,8 +26,23 @@ function Caption({ time, caption }: { time?: string; caption: string }) {
   )
 }
 
-function Media({ item }: { item: StoryMedia }) {
+function Media({ item, t }: { item: StoryMedia; t: (key: 'soundOn' | 'soundOff') => string }) {
   const place = `${item.layout.half ? 'col-span-1' : 'col-span-2'} ${item.layout.col}`
+
+  if (item.kind === 'note') {
+    return (
+      <blockquote className={`m-0 border-l-2 border-ember-600 pl-5 lg:pl-8 ${place}`}>
+        <p className="m-0 font-serif text-[28px] leading-[1.12] text-forest-950 lg:text-[48px] lg:leading-[1.08]">
+          {item.text}
+        </p>
+        {item.tag && (
+          <p className="mt-3 mb-0 text-[15px] font-semibold tracking-[.02em] text-ember-600 lg:mt-5 lg:text-[18px]">
+            {item.tag}
+          </p>
+        )}
+      </blockquote>
+    )
+  }
 
   if (item.kind === 'photo') {
     return (
@@ -47,7 +62,14 @@ function Media({ item }: { item: StoryMedia }) {
   if (item.kind === 'clip') {
     return (
       <figure className={`m-0 ${place}`}>
-        <LoopClip poster={item.poster} src={item.src} alt={item.alt} sizes={sizesFor(item.layout)} />
+        <LoopClip
+          poster={item.poster}
+          src={item.src}
+          alt={item.alt}
+          sizes={sizesFor(item.layout)}
+          sound={item.sound}
+          soundLabels={{ on: t('soundOn'), off: t('soundOff') }}
+        />
         <Caption time={item.time} caption={item.caption} />
       </figure>
     )
@@ -150,7 +172,7 @@ export default function StoryAlbum({ album }: { album: StoryAlbumData }) {
 
       {/* Contents — the chapters as anchors, a swipe row on phones. */}
       <nav aria-label={t('contents')} className="border-b border-line bg-cream">
-        <ol className="mx-auto flex max-w-[1440px] snap-x scroll-px-5 gap-6 overflow-x-auto px-5 py-4 lg:grid lg:grid-cols-5 lg:gap-6 lg:overflow-visible lg:px-14 lg:py-6">
+        <ol className="mx-auto flex max-w-[1440px] snap-x scroll-px-5 gap-6 overflow-x-auto px-5 py-4 lg:grid lg:auto-cols-fr lg:grid-flow-col lg:gap-6 lg:overflow-visible lg:px-14 lg:py-6">
           {album.chapters.map((chapter, i) => (
             <li key={chapter.title} className="flex-none snap-start lg:flex-auto">
               <a href={`#chapter-${i + 1}`} className="group block">
@@ -206,7 +228,7 @@ export default function StoryAlbum({ album }: { album: StoryAlbumData }) {
                     </div>
                     <div className="mt-4 grid grid-cols-2 gap-x-3 gap-y-6 lg:mt-6 lg:gap-x-6">
                       {side.media.map((item) => (
-                        <Media key={item.caption} item={item} />
+                        <Media key={'caption' in item ? item.caption : item.text} item={item} t={t} />
                       ))}
                     </div>
                   </div>
@@ -215,7 +237,7 @@ export default function StoryAlbum({ album }: { album: StoryAlbumData }) {
             ) : (
               <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-6 lg:mt-12 lg:grid-cols-12 lg:gap-x-6 lg:gap-y-10">
                 {chapter.media.map((item) => (
-                  <Media key={item.caption} item={item} />
+                  <Media key={'caption' in item ? item.caption : item.text} item={item} t={t} />
                 ))}
               </div>
             )}

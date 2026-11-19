@@ -30,6 +30,7 @@ import batchWall from '@/assets/gallery/ratangad/batch-7-wall.jpg'
 import batchTop from '@/assets/gallery/ratangad/batch-8-top.jpg'
 import batchBoating from '@/assets/gallery/ratangad/batch-9-boating.jpg'
 import sdKokankadaSunset from '@/assets/gallery/sandhan-14-nov/01-kokankada-sunset.jpg'
+import sdLocalPoster from '@/assets/gallery/sandhan-14-nov/00-local-poster.jpg'
 import sdTemple from '@/assets/gallery/sandhan-14-nov/00a-temple.jpg'
 import sdKedareshwar from '@/assets/gallery/sandhan-14-nov/00b-kedareshwar-cave.jpg'
 import sdCampSunrise from '@/assets/gallery/sandhan-14-nov/03-camp-sunrise.jpg'
@@ -259,6 +260,15 @@ export type StoryMedia =
       alt: string
       time?: string
       caption: string
+      /** Keeps the soundtrack: still autoplays muted, with a sound toggle. */
+      sound?: boolean
+      layout: StoryLayout
+    }
+  | {
+      /** A line set large beside the media — a tagline, a hashtag. */
+      kind: 'note'
+      text: string
+      tag?: string
       layout: StoryLayout
     }
   | {
@@ -320,12 +330,34 @@ export const sandhanNovAlbum: StoryAlbum = {
   batchLine: 'Batch 1 · Sat 14 – Sun 15 Nov 2026',
   day1: '2026-11-14',
   summary:
-    'Kedareshwar cave and sunset at Kokankada on Saturday. On Sunday: sunrise at the lake, poha off a wood fire, a rappel down the valley wall, a snake on the rocks, and the jeep home at dusk.',
+    'A song in the Mumbai local, Kedareshwar cave and sunset at Kokankada on Saturday. On Sunday: sunrise at the lake, poha off a wood fire, a rappel down the valley wall, a snake on the rocks, and the jeep home at dusk.',
   facts: ['2 days · 1 night', 'By train, Vadodara ⇄ Vadodara', 'First rappel on this weekend'],
   cover: sdRappelDown,
   coverAlt:
     'A trekker in a red helmet and harness at the foot of the rappel wall in Sandhan Valley, arms flung wide, ropes coiled on the rock',
   chapters: [
+    {
+      when: 'Sat 14 Nov · early morning',
+      title: 'Dadar to Kasara, by local',
+      line: 'The first leg of the trek is the Mumbai local — and the batch did not wait for the mountains to start.',
+      media: [
+        {
+          kind: 'clip',
+          poster: sdLocalPoster,
+          src: '/gallery/sandhan-14-nov/local.mp4',
+          caption: 'Jaba jaba, in the local',
+          alt: 'Clip with sound: trekkers in a crowded Mumbai local train clapping and gesturing along to a song',
+          sound: true,
+          layout: { col: 'lg:col-start-2 lg:col-span-4' },
+        },
+        {
+          kind: 'note',
+          text: 'With Eco Adventure, adventure never stops.',
+          tag: '#JabaJabaInLocal',
+          layout: { col: 'lg:col-start-7 lg:col-span-5 lg:self-center' },
+        },
+      ],
+    },
     {
       when: 'Sat 14 Nov · afternoon to sunset',
       title: 'Two sides of Harishchandragad',
